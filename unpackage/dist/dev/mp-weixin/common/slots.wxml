@@ -1,2 +1,2 @@
-<import src="/common/navigator.vue.wxml" />
+<import src="/components/navigator.vue.wxml" />
 
