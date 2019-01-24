@@ -1,0 +1,57 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/index/index"
+		},
+		{
+			"path": "pages/ticket/ticket"
+		},
+		{
+			"path": "pages/video/video"
+		},
+		{
+			"path": "pages/mine/mine"
+		},
+		{
+			"path": "pages/movies/movie-detail"
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "white",
+		"navigationBarBackgroundColor": "#1e2535",
+		"backgroundColor": "#1e2535",
+		"navigationStyle":"custom"
+	},
+	"tabBar":{
+		"color": "#333",
+	    "selectedColor": "#FA7E40",
+	    "borderStyle": "black",
+	    "backgroundColor": "#ffffff",
+	    "list":[
+			{
+		      	"pagePath": "pages/index/index",
+		      	"iconPath": "static/image/home.png",
+		      	"selectedIconPath": "static/image/home_actived.png",
+		      	"text": "首页"
+		    },
+		    {
+		      	"pagePath": "pages/ticket/ticket",
+		      	"iconPath": "static/image/ticket.png",
+		      	"selectedIconPath": "static/image/ticket_actived.png",
+		      	"text": "购票"
+		    },
+		    {
+		      	"pagePath": "pages/video/video",
+		      	"iconPath": "static/image/video.png",
+		      	"selectedIconPath": "static/image/video_actived.png",
+		      	"text": "视频"
+		    },
+		    {
+		      	"pagePath": "pages/mine/mine",
+		      	"iconPath": "static/image/mine.png",
+		      	"selectedIconPath": "static/image/mine_actived.png",
+		      	"text": "我的"
+		    }
+	    ]
+	}
+}

@@ -1,0 +1,2 @@
+<import src="./ticket.vue.wxml" />
+    <template is="ca193800" data="{{ ...$root['0'], $root }}"/>
