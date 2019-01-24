@@ -85,7 +85,7 @@
 <script>
     import util from '../../common/util'
     import cityList from '../../common/cityList'
-    import navigate from '../../common/navigator'
+    import navigate from '../../components/navigator'
     export default {
         data() {
             return {
