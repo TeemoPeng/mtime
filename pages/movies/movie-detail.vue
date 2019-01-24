@@ -26,7 +26,7 @@
                             <text :class='showAllStory'>剧情：{{movieDetail.basic.story}}</text>
                             <text :class='arrowDirection+" iconfont icon-down"' @tap='showMore'></text>
                         </view>
-                        <view class="movie-items itme-gap"></view>
+                        <view class="movie-items item-gap"></view>
 
                         <view class='movie-items'>
                             <!--演职员表-->
@@ -56,16 +56,113 @@
                             <view class='movie-number all-actors'>全部 <text class="iconfont icon-arrow-right"></text></view>
                         </view>
 
-                        <view class="movie-items itme-gap"></view>
+                        <view class="movie-items item-gap"></view>
 
-                        <view class="movie-video-img">
+                        <view class="movie-items movie-video-img">
                             <!--视频、图片-->
-                            
+                            <view class="movie-video-wrap">
+                                <view class="item-title">
+                                    <view><text class=''>视频</text></view>
+                                    <view><text class=''>{{movieDetail.basic.video.count}}</text> <text class="iconfont icon-arrow-right"></text></view>
+                                </view>
+                                <view class="item-content">
+                                    <image class='video-wrap' :src='movieDetail.basic.video.img'></image>
+                                    <text class="iconfont icon-play"></text>
+                                </view>
+                            </view>
+                            <view class="movie-img-wrap">
+                                <view class="item-title">
+                                    <view><text class=''>图片</text></view>
+                                    <view><text class=''>{{movieDetail.basic.stageImg.count}}</text> <text class="iconfont icon-arrow-right"></text></view>
+                                </view>
+                                <view class="item-content">
+                                    <image class='img-wrap' :src='movieDetail.basic.stageImg.list[0].imgUrl' mode='aspectFill'></image>
+                                </view>
+                            </view>
                         </view>
+                        <view class="movie-items item-gap" v-if='movieDetail.boxOffice.todayBox>0'></view>
+                        <view class="movie-items" v-if='movieDetail.boxOffice.todayBox>0'>
+                            <!--票房-->
+                            <view class='office-item'>
+                                <text>{{movieDetail.boxOffice.ranking}}</text>
+                                <text>票房排名 <text class="iconfont icon-arrow-right"></text></text>
+                            </view>
+                            <view class='office-item'>
+                                <text>{{movieDetail.boxOffice.todayBoxDes}}</text>
+                                <text>今日实时（万） <text class="iconfont icon-arrow-right"></text></text>
+                            </view>
+                            <view class='office-item'>
+                                <text>{{movieDetail.boxOffice.totalBoxDes}}</text>
+                                <text>累计票房（万） <text class="iconfont icon-arrow-right"></text></text>
+                            </view>
+                        </view>      
+                        <view class="movie-items item-gap"></view>  
+
+                        <view class="movie-items movie-short-comment">
+                            <!--短评-->
+                            <view class="item-title">
+                                <view><text class=''>短评</text></view>
+                                <view><text class=''>全部</text> <text class="iconfont icon-arrow-right"></text></view>
+                            </view>
+                            <view class='comment-content'>
+                                <view class="comment-list" v-for='(item,index) in comment.mini.list' v-if='comment' :key='index'>
+                                    <view class='user-img'>
+                                        <image class='user-head-img' :src='item.headImg'></image>
+                                    </view>
+                                    <view class='comment-info'>
+                                        <view class='info-list'>
+                                            <text class='color-gray'>{{item.nickname}}</text>
+                                            <text class='color-green' v-if='item.rating > 0'>评 {{item.rating%1==0?item.rating+'.0':item.rating}}</text>
+                                        </view>
+                                        <view class="info-list">{{item.content}}</view>
+                                        <view class="info-list">
+                                            <view class='color-gray comment-time'>{{item.commentDate}}</view>
+                                            <view class='color-gray comment-opt'>
+                                                <view class=''>
+                                                    <text class='iconfont icon-comment'> </text>
+                                                    <text class=''>{{item.replyCount>0?item.replyCount:''}}</text>
+                                                </view>
+                                                <view class=''>
+                                                    <text class='iconfont icon-zan'></text>
+                                                    <text class=''>{{item.praiseCount>0?item.praiseCount:''}}</text>
+                                                </view>
+                                            </view>
+                                        </view>
+                                    </view>
+                                </view>
+
+                                <view class='more-comment' v-if='comment.mini.total > 0'>
+                                    <text class='color-green' @tap='goMiniCommentList'>查看更多{{comment.mini.total}}条评论</text>
+                                </view>
+                            </view>
+                        </view>  
+
+                        <view class="movie-items item-gap"></view>  
+
+                        <view class="movie-items movie-long-comment" v-if='comment.plus.total>0'>
+                            <!--精选影评-->
+                            <view class="item-title">
+                                <view><text class=''>影评</text></view>
+                                <view><text class=''>全部</text> <text class="iconfont icon-arrow-right"></text></view>
+                            </view>
+                            <view class="item-long-comment">
+                                <view class='long-content'>
+                                    <text class=''>{{comment.plus.list[0].title}}</text>
+                                </view>
+                                <view class='flex-flow-row long-list color-gray'>
+                                    <view class=''>
+                                        <image class='user-head-img user-head-img2' :src='comment.plus.list[0].headImg'></image>
+                                    </view>
+                                    <text class=''>{{comment.plus.list[0].nickname}}</text>
+                                    <text class=''>{{comment.plus.list[0].replyCount}}评论</text>
+                                </view>
+                            </view>
+                        </view>                
                     </view>
                 </view>
             </view>
             <view class="main-footer">
+                <!--底部-->
                 <view class='foot-like foot-txt'>
                     <text class='iconfont icon-like'></text>
                     <text class=''>想看</text>
@@ -99,7 +196,16 @@
                 releaseDate:{},
                 showAllStory:'story-txt',
                 arrowDirection:'',
-                buyBtnText:'预售'
+                buyBtnText:'预售',
+                comment:{
+                    mini:{
+                        list:[]
+                    },
+                    plus:{
+                        total:0
+                    }
+                },
+                pageIndex:1
             }
         },
         onLoad(option) {
@@ -130,6 +236,16 @@
                     console.log('预售');
                     self.buyBtnText = '预售';
                 }
+
+                //获取评论                
+                util.request({
+                    url:'https://ticket-api-m.mtime.cn/movie/hotComment.api?movieId='+self.movieDetail.basic.movieId
+                }).then(res=>{
+                    self.comment = res.data;                    
+                    self.comment.mini.list.forEach((item,index)=>{
+                        item.commentDate= util.formatDate('Y-m-d H:i:s',item.commentDate);
+                    })
+                })
             })
         },
         methods: {
@@ -142,6 +258,22 @@
                     self.showAllStory = '';
                     self.arrowDirection = 'arrow-up';
                 }
+            },
+            getMoreMiniComments(pageIndex){
+                //获取更多短评
+                let self = this;
+                util.request({
+                    url:'https://api-m.mtime.cn/Showtime/HotMovieComments.api?movieId='+self.movieDetail.basic.movieId+'&pageIndex='+self.pageIndex
+                }).then(res=>{
+                    if(self.pageIndex == 1){
+                        console.log('list:',res.data.cts)
+                        self.comment.mini.list = res.data.cts;
+                    }
+                self.pageIndex++;
+                })
+            },
+            goMiniCommentList(){
+                let self = this;
             }
         },
         components:{
@@ -154,8 +286,8 @@
     @import "static/css/base.scss";
     .detail-bg{height: 200upx;width: 100%;overflow: hidden;filter: blur(20px);border-bottom: 1px solid #ddd;position: relative;}
     .movie-wrap{display: flex;flex-flow: column;position: relative;z-index: 999;background: #fff;}
-    .movie-wrap-inner{margin-top: -100upx;}
-    .movie-items{display: flex;flex-flow: row;padding: 0 20upx;position: relative;}
+    .movie-wrap-inner{margin-top: -110upx;}
+    .movie-items{display: flex;flex-flow: row;padding: 20upx;position: relative;}
     .movie-post{width: 222upx;height: 320upx;margin-right: 20upx;}
     .movie-post-img{width: 222upx;height: 320upx;padding: 4upx;background: #fff;}
     .movie-info{display: flex;flex-flow: column;color: #fff;font-size: 30upx;flex: 1;margin-left: 8upx;}
@@ -166,11 +298,11 @@
     .story .icon-down{color: #999;text-align: center;margin-top: 10upx;font-size: 38upx;}
     .story-txt{word-break:break-all;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
 
-    .itme-gap{height: 30upx;background: #f1f1f1;border:1px solid #f5eaea;border-left:none;border-right: none;}
+    .item-gap{height: 30upx;background: #f1f1f1;border:1px solid #f5eaea;border-left:none;border-right: none;}
     .arrow-up{transform:rotate(180deg);}
     .detail-bg-img{width: 100%;height: 200upx;}
 
-    .actors-title{margin: 20upx 0;width: 100%;font-size: 30upx;}
+    .actors-title{margin: 0 0 20upx 0;width: 100%;font-size: 30upx;}
     .actor-img-wrap{width: 200upx;height: 200upx;border:1px solid #e4dddd;position: relative;overflow: visible;}
     .actors-item{display: flex;flex-flow: column;align-items: center;font-size: 28upx;color: #333;}
     .actor-name{margin: 4upx 0;font-size: 24upx;text-align: center;}
@@ -191,6 +323,40 @@
     .foot-txt{color: #6b6b6b;display: flex;flex-flow: column;align-items: center;justify-content: center;}
     .foot-txt text:nth-child(2){font-size: 24upx;}
     .foot-txt text:nth-child(1){font-size: 40upx;margin-bottom: 6upx;}
+
+    .movie-video-wrap{flex: 4;padding-right:30upx;}
+    .movie-img-wrap{flex: 3;padding-left:30upx;}
+    .movie-video-img{padding: 20upx;}
+    .item-title{display: flex;flex-flow: row;align-items: center;justify-content: space-between;flex: 1;}
+    .item-title view:nth-child(2){color: #a2a2a2;}
+    .item-content{position: relative;margin: 20upx 0;}
+    .video-wrap{width: 380upx;height: 260upx;border:1px solid #f5eaea;position: relative;overflow: visible;}
+    .item-content .icon-play{position: absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index: 9999;color: #fff;font-size: 90upx;}
+    .img-wrap{width: 260upx;height: 260upx;border:1px solid #f5eaea;background: #000;}
+    .video-wrap:after{position: absolute;right: -30upx;;top:0;width: 1px;height: 100%;content: '';background: #f5eaea;}
+    .office-item{flex: 1;display: flex;flex-flow: column;align-items: center;justify-content: center;}
+    .office-item>text:nth-child(2){font-size: 24upx;color:#777;display: flex;flex-flow: row;align-items: center;}
+    .office-item>text:nth-child(1){font-size: 36upx;color:#ff8601;margin-bottom: 10upx;}
+    .office-item>text:nth-child(2) .icon-arrow-right{font-size: 20upx;}
+    .movie-short-comment{padding: 20upx;display: flex;flex-flow: column;}
+    .user-head-img{width: 100upx;height: 100upx;border-radius: 100%;border:1px solid #f5eaea;}
+    /*.comment-content{padding: 20upx 0;}*/
+    .comment-info{margin-left: 16upx;flex: 1;padding-right: 20upx;}
+    .info-list{display: flex;flex-flow: row;align-items: center;justify-content: space-between;margin: 0 0 20upx 0;}
+    .comment-list{display: flex;flex-flow: row;padding: 30upx 0 20upx 0;border-bottom: 1px solid #f5eaea;}
+    .color-gray{color: #999;}
+    .color-green{color:#71a618;}
+    .comment-time{flex: 2;font-size: 26upx}
+    .comment-opt{flex: 1;display: flex;flex-flow: row;align-items: center;justify-content: space-between;}
+    .comment-opt .iconfont{font-size: 44upx;margin-right: 4upx;}
+    .comment-opt>view{display: flex;flex-flow: row;align-items: center;}
+    .more-comment{padding-top: 30upx;text-align: center;}
+    .movie-long-comment{display: flex;flex-flow: column;padding: 20upx;}
+    .long-content{padding: 20upx 0;}
+    .user-head-img2{width: 60upx;height: 60upx;}
+    .long-list>view{margin-right: 10upx;}
+    .long-list>text{padding: 0 20upx;}
+    .long-list>text:nth-child(2){border-right: 1px solid #999;}
 </style>
 
 

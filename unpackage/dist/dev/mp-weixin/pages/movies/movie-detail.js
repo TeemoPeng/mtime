@@ -376,6 +376,103 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 var _util = _interopRequireDefault(__webpack_require__(/*! ../../common/util */ "../../../../../../projects/test/uni-app/mtime/common/util.js"));
 var _cityList = _interopRequireDefault(__webpack_require__(/*! ../../common/cityList */ "../../../../../../projects/test/uni-app/mtime/common/cityList.js"));
 var _navigator = _interopRequireDefault(__webpack_require__(/*! ../../components/navigator */ "../../../../../../projects/test/uni-app/mtime/components/navigator.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
@@ -392,7 +489,16 @@ var _navigator = _interopRequireDefault(__webpack_require__(/*! ../../components
       releaseDate: {},
       showAllStory: 'story-txt',
       arrowDirection: '',
-      buyBtnText: '预售' };
+      buyBtnText: '预售',
+      comment: {
+        mini: {
+          list: [] },
+
+        plus: {
+          total: 0 } },
+
+
+      pageIndex: 1 };
 
   },
   onLoad: function onLoad(option) {
@@ -423,6 +529,16 @@ var _navigator = _interopRequireDefault(__webpack_require__(/*! ../../components
         console.log('预售');
         self.buyBtnText = '预售';
       }
+
+      //获取评论                
+      _util.default.request({
+        url: 'https://ticket-api-m.mtime.cn/movie/hotComment.api?movieId=' + self.movieDetail.basic.movieId }).
+      then(function (res) {
+        self.comment = res.data;
+        self.comment.mini.list.forEach(function (item, index) {
+          item.commentDate = _util.default.formatDate('Y-m-d H:i:s', item.commentDate);
+        });
+      });
     });
   },
   methods: {
@@ -435,6 +551,22 @@ var _navigator = _interopRequireDefault(__webpack_require__(/*! ../../components
         self.showAllStory = '';
         self.arrowDirection = 'arrow-up';
       }
+    },
+    getMoreMiniComments: function getMoreMiniComments(pageIndex) {
+      //获取更多短评
+      var self = this;
+      _util.default.request({
+        url: 'https://api-m.mtime.cn/Showtime/HotMovieComments.api?movieId=' + self.movieDetail.basic.movieId + '&pageIndex=' + self.pageIndex }).
+      then(function (res) {
+        if (self.pageIndex == 1) {
+          console.log('list:', res.data.cts);
+          self.comment.mini.list = res.data.cts;
+        }
+        self.pageIndex++;
+      });
+    },
+    goMiniCommentList: function goMiniCommentList() {
+      var self = this;
     } },
 
   components: {
@@ -592,7 +724,7 @@ var render = function() {
                       on: { tap: _vm.showMore }
                     })
                   ]),
-                  _c("view", { staticClass: "movie-items itme-gap" }),
+                  _c("view", { staticClass: "movie-items item-gap" }),
                   _c("view", { staticClass: "movie-items" }, [
                     _c("view", { staticClass: "movie-workers" }, [
                       _c(
@@ -686,15 +818,276 @@ var render = function() {
                     ]),
                     _vm._m(0)
                   ]),
-                  _c("view", { staticClass: "movie-items itme-gap" }),
-                  _c("view", { staticClass: "movie-video-img" })
+                  _c("view", { staticClass: "movie-items item-gap" }),
+                  _c("view", { staticClass: "movie-items movie-video-img" }, [
+                    _c("view", { staticClass: "movie-video-wrap" }, [
+                      _c("view", { staticClass: "item-title" }, [
+                        _vm._m(1),
+                        _c("view", [
+                          _c("text", {}, [
+                            _vm._v(_vm._s(_vm.movieDetail.basic.video.count))
+                          ]),
+                          _c("text", {
+                            staticClass: "iconfont icon-arrow-right"
+                          })
+                        ])
+                      ]),
+                      _c("view", { staticClass: "item-content" }, [
+                        _c("image", {
+                          staticClass: "video-wrap",
+                          attrs: { src: _vm.movieDetail.basic.video.img }
+                        }),
+                        _c("text", { staticClass: "iconfont icon-play" })
+                      ])
+                    ]),
+                    _c("view", { staticClass: "movie-img-wrap" }, [
+                      _c("view", { staticClass: "item-title" }, [
+                        _vm._m(2),
+                        _c("view", [
+                          _c("text", {}, [
+                            _vm._v(_vm._s(_vm.movieDetail.basic.stageImg.count))
+                          ]),
+                          _c("text", {
+                            staticClass: "iconfont icon-arrow-right"
+                          })
+                        ])
+                      ]),
+                      _c("view", { staticClass: "item-content" }, [
+                        _c("image", {
+                          staticClass: "img-wrap",
+                          attrs: {
+                            src: _vm.movieDetail.basic.stageImg.list[0].imgUrl,
+                            mode: "aspectFill"
+                          }
+                        })
+                      ])
+                    ])
+                  ]),
+                  _vm.movieDetail.boxOffice.todayBox > 0
+                    ? _c("view", { staticClass: "movie-items item-gap" })
+                    : _vm._e(),
+                  _vm.movieDetail.boxOffice.todayBox > 0
+                    ? _c("view", { staticClass: "movie-items" }, [
+                        _c("view", { staticClass: "office-item" }, [
+                          _c("text", [
+                            _vm._v(_vm._s(_vm.movieDetail.boxOffice.ranking))
+                          ]),
+                          _vm._m(3)
+                        ]),
+                        _c("view", { staticClass: "office-item" }, [
+                          _c("text", [
+                            _vm._v(
+                              _vm._s(_vm.movieDetail.boxOffice.todayBoxDes)
+                            )
+                          ]),
+                          _vm._m(4)
+                        ]),
+                        _c("view", { staticClass: "office-item" }, [
+                          _c("text", [
+                            _vm._v(
+                              _vm._s(_vm.movieDetail.boxOffice.totalBoxDes)
+                            )
+                          ]),
+                          _vm._m(5)
+                        ])
+                      ])
+                    : _vm._e(),
+                  _c("view", { staticClass: "movie-items item-gap" }),
+                  _c(
+                    "view",
+                    { staticClass: "movie-items movie-short-comment" },
+                    [
+                      _vm._m(6),
+                      _c(
+                        "view",
+                        { staticClass: "comment-content" },
+                        [
+                          _vm._l(_vm.comment.mini.list, function(item, index) {
+                            return _vm.comment
+                              ? _c(
+                                  "view",
+                                  { key: index, staticClass: "comment-list" },
+                                  [
+                                    _c("view", { staticClass: "user-img" }, [
+                                      _c("image", {
+                                        staticClass: "user-head-img",
+                                        attrs: { src: item.headImg }
+                                      })
+                                    ]),
+                                    _c(
+                                      "view",
+                                      { staticClass: "comment-info" },
+                                      [
+                                        _c(
+                                          "view",
+                                          { staticClass: "info-list" },
+                                          [
+                                            _c(
+                                              "text",
+                                              { staticClass: "color-gray" },
+                                              [_vm._v(_vm._s(item.nickname))]
+                                            ),
+                                            item.rating > 0
+                                              ? _c(
+                                                  "text",
+                                                  {
+                                                    staticClass: "color-green"
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      "评 " +
+                                                        _vm._s(
+                                                          item.rating % 1 == 0
+                                                            ? item.rating + ".0"
+                                                            : item.rating
+                                                        )
+                                                    )
+                                                  ]
+                                                )
+                                              : _vm._e()
+                                          ]
+                                        ),
+                                        _c(
+                                          "view",
+                                          { staticClass: "info-list" },
+                                          [_vm._v(_vm._s(item.content))]
+                                        ),
+                                        _c(
+                                          "view",
+                                          { staticClass: "info-list" },
+                                          [
+                                            _c(
+                                              "view",
+                                              {
+                                                staticClass:
+                                                  "color-gray comment-time"
+                                              },
+                                              [_vm._v(_vm._s(item.commentDate))]
+                                            ),
+                                            _c(
+                                              "view",
+                                              {
+                                                staticClass:
+                                                  "color-gray comment-opt"
+                                              },
+                                              [
+                                                _c("view", {}, [
+                                                  _c("text", {
+                                                    staticClass:
+                                                      "iconfont icon-comment"
+                                                  }),
+                                                  _c("text", {}, [
+                                                    _vm._v(
+                                                      _vm._s(
+                                                        item.replyCount > 0
+                                                          ? item.replyCount
+                                                          : ""
+                                                      )
+                                                    )
+                                                  ])
+                                                ]),
+                                                _c("view", {}, [
+                                                  _c("text", {
+                                                    staticClass:
+                                                      "iconfont icon-zan"
+                                                  }),
+                                                  _c("text", {}, [
+                                                    _vm._v(
+                                                      _vm._s(
+                                                        item.praiseCount > 0
+                                                          ? item.praiseCount
+                                                          : ""
+                                                      )
+                                                    )
+                                                  ])
+                                                ])
+                                              ]
+                                            )
+                                          ]
+                                        )
+                                      ]
+                                    )
+                                  ]
+                                )
+                              : _vm._e()
+                          }),
+                          _vm.comment.mini.total > 0
+                            ? _c("view", { staticClass: "more-comment" }, [
+                                _c(
+                                  "text",
+                                  {
+                                    staticClass: "color-green",
+                                    attrs: { eventid: "3fa056aa-1" },
+                                    on: { tap: _vm.goMiniCommentList }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "查看更多" +
+                                        _vm._s(_vm.comment.mini.total) +
+                                        "条评论"
+                                    )
+                                  ]
+                                )
+                              ])
+                            : _vm._e()
+                        ],
+                        2
+                      )
+                    ]
+                  ),
+                  _c("view", { staticClass: "movie-items item-gap" }),
+                  _vm.comment.plus.total > 0
+                    ? _c(
+                        "view",
+                        { staticClass: "movie-items movie-long-comment" },
+                        [
+                          _vm._m(7),
+                          _c("view", { staticClass: "item-long-comment" }, [
+                            _c("view", { staticClass: "long-content" }, [
+                              _c("text", {}, [
+                                _vm._v(_vm._s(_vm.comment.plus.list[0].title))
+                              ])
+                            ]),
+                            _c(
+                              "view",
+                              {
+                                staticClass:
+                                  "flex-flow-row long-list color-gray"
+                              },
+                              [
+                                _c("view", {}, [
+                                  _c("image", {
+                                    staticClass: "user-head-img user-head-img2",
+                                    attrs: {
+                                      src: _vm.comment.plus.list[0].headImg
+                                    }
+                                  })
+                                ]),
+                                _c("text", {}, [
+                                  _vm._v(
+                                    _vm._s(_vm.comment.plus.list[0].nickname)
+                                  )
+                                ]),
+                                _c("text", {}, [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm.comment.plus.list[0].replyCount
+                                    ) + "评论"
+                                  )
+                                ])
+                              ]
+                            )
+                          ])
+                        ]
+                      )
+                    : _vm._e()
                 ])
               ])
             : _vm._e()
         ]),
         _c("view", { staticClass: "main-footer" }, [
-          _vm._m(1),
-          _vm._m(2),
+          _vm._m(8),
+          _vm._m(9),
           _c("view", { staticClass: "foot-buy" }, [
             _c("text", { staticClass: "buy-btn" }, [
               _vm._v(_vm._s(_vm.buyBtnText))
@@ -714,6 +1107,69 @@ var staticRenderFns = [
     return _c("view", { staticClass: "movie-number all-actors" }, [
       _vm._v("全部 "),
       _c("text", { staticClass: "iconfont icon-arrow-right" })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("view", [_c("text", {}, [_vm._v("视频")])])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("view", [_c("text", {}, [_vm._v("图片")])])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("text", [
+      _vm._v("票房排名 "),
+      _c("text", { staticClass: "iconfont icon-arrow-right" })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("text", [
+      _vm._v("今日实时（万） "),
+      _c("text", { staticClass: "iconfont icon-arrow-right" })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("text", [
+      _vm._v("累计票房（万） "),
+      _c("text", { staticClass: "iconfont icon-arrow-right" })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("view", { staticClass: "item-title" }, [
+      _c("view", [_c("text", {}, [_vm._v("短评")])]),
+      _c("view", [
+        _c("text", {}, [_vm._v("全部")]),
+        _c("text", { staticClass: "iconfont icon-arrow-right" })
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("view", { staticClass: "item-title" }, [
+      _c("view", [_c("text", {}, [_vm._v("影评")])]),
+      _c("view", [
+        _c("text", {}, [_vm._v("全部")]),
+        _c("text", { staticClass: "iconfont icon-arrow-right" })
+      ])
     ])
   },
   function() {

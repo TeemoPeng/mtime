@@ -19,7 +19,7 @@
 
 	uni-page-body{height: 100%;} 
 	.content{height: 100%;display: flex;flex-flow: column;}	
-	view{font-size: 30upx;box-sizing: border-box;}	   
+	view{font-size: 28upx;box-sizing: border-box;}	   
     .align-center{text-align: center;}
     ::-webkit-scrollbar {
         width: 0;     
@@ -51,6 +51,7 @@
     .status{
         height:var(--status-bar-height);
     }
+    .flex-flow-row{display: flex;flex-flow: row;align-items: center;}
     .main{flex: 1;overflow: auto;margin-top: var(--status-bar-height);padding-top: $navigator-height;box-sizing: border-box;}
     /*uni-image{width: 100%;}*/
 </style>
