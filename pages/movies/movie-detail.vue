@@ -65,7 +65,7 @@
                                     <view><text class=''>视频</text></view>
                                     <view><text class=''>{{movieDetail.basic.video.count}}</text> <text class="iconfont icon-arrow-right"></text></view>
                                 </view>
-                                <view class="item-content">
+                                <view class="item-content" @tap='goVideoList'>
                                     <image class='video-wrap' :src='movieDetail.basic.video.img'></image>
                                     <text class="iconfont icon-play"></text>
                                 </view>
@@ -75,7 +75,7 @@
                                     <view><text class=''>图片</text></view>
                                     <view><text class=''>{{movieDetail.basic.stageImg.count}}</text> <text class="iconfont icon-arrow-right"></text></view>
                                 </view>
-                                <view class="item-content">
+                                <view class="item-content" @tap='goImgList'>
                                     <image class='img-wrap' :src='movieDetail.basic.stageImg.list[0].imgUrl' mode='aspectFill'></image>
                                 </view>
                             </view>
@@ -96,9 +96,9 @@
                                 <text>累计票房（万） <text class="iconfont icon-arrow-right"></text></text>
                             </view>
                         </view>      
-                        <view class="movie-items item-gap"></view>  
 
-                        <view class="movie-items movie-short-comment">
+                        <view class="movie-items item-gap" v-if='comment.mini.list.length > 0'></view>  
+                        <view class="movie-items movie-short-comment" v-if='comment.mini.list.length > 0'>
                             <!--短评-->
                             <view class="item-title">
                                 <view><text class=''>短评</text></view>
@@ -196,7 +196,7 @@
                 releaseDate:{},
                 showAllStory:'story-txt',
                 arrowDirection:'',
-                buyBtnText:'预售',
+                buyBtnText:'',
                 comment:{
                     mini:{
                         list:[]
@@ -274,6 +274,20 @@
             },
             goMiniCommentList(){
                 let self = this;
+            },
+            goVideoList(){
+                //视频、预告片列表
+                let self = this;
+                uni.navigateTo({
+                    url:'/pages/movies/video-list?movieName='+self.movieDetail.basic.name+'&movieId='+self.movieDetail.basic.movieId
+                })
+            },
+            goImgList(){
+                //图片列表
+                let self = this;
+                uni.navigateTo({
+                    url:'/pages/movies/img-list?movieName='+self.movieDetail.basic.name+'&movieId='+self.movieDetail.basic.movieId
+                })
             }
         },
         components:{
@@ -331,7 +345,7 @@
     .item-title view:nth-child(2){color: #a2a2a2;}
     .item-content{position: relative;margin: 20upx 0;}
     .video-wrap{width: 380upx;height: 260upx;border:1px solid #f5eaea;position: relative;overflow: visible;}
-    .item-content .icon-play{position: absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index: 9999;color: #fff;font-size: 90upx;}
+    .item-content .icon-play{position: absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index: 9999;color: #fff;font-size: 90upx;width: 90upx;height: 90upx;border-radius: 100%;background: rgba(0,0,0,.7)}
     .img-wrap{width: 260upx;height: 260upx;border:1px solid #f5eaea;background: #000;}
     .video-wrap:after{position: absolute;right: -30upx;;top:0;width: 1px;height: 100%;content: '';background: #f5eaea;}
     .office-item{flex: 1;display: flex;flex-flow: column;align-items: center;justify-content: center;}
@@ -350,13 +364,14 @@
     .comment-opt{flex: 1;display: flex;flex-flow: row;align-items: center;justify-content: space-between;}
     .comment-opt .iconfont{font-size: 44upx;margin-right: 4upx;}
     .comment-opt>view{display: flex;flex-flow: row;align-items: center;}
-    .more-comment{padding-top: 30upx;text-align: center;}
+    .more-comment{padding-top: 20upx;text-align: center;}
     .movie-long-comment{display: flex;flex-flow: column;padding: 20upx;}
     .long-content{padding: 20upx 0;}
     .user-head-img2{width: 60upx;height: 60upx;}
     .long-list>view{margin-right: 10upx;}
     .long-list>text{padding: 0 20upx;}
     .long-list>text:nth-child(2){border-right: 1px solid #999;}
+    .item-content .icon-play:before{display: block;margin-top: -4upx;}
 </style>
 
 

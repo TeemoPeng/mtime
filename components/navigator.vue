@@ -94,7 +94,7 @@
         height:var(--status-bar-height);
     }
     .titles{background: $navigator-background;color:$navigator-color;height: $navigator-height;display: flex;flex-flow: row;background: #1e2535;color: #f8ffff;position: fixed;left: 0;top:var(--status-bar-height);width: 100%;z-index: 999999;align-items: center;padding: 0 20upx;justify-content: space-between;}
-    .title-center{white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}
+    .title-center{white-space: nowrap;overflow: hidden;text-overflow: ellipsis;font-size: 32upx;}
     .title-left,.title-right{min-width: 120upx;}
     .title-right{text-align: right;display: flex;flex-flow: row;align-items: center;justify-content: flex-end;}
     .title-right .iconfont{margin:0 40upx;font-size: 40upx;}

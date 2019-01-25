@@ -45,7 +45,7 @@
   left: 0;
   top: 25px;
   width: 100%;
-  z-index: 999;
+  z-index: 999999;
 }
 .nav {
   display: -webkit-box;

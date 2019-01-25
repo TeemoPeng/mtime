@@ -130,7 +130,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("view", { staticClass: "content" }, [_vm._v("\n    我的\n")])
+  return _c("view", { staticClass: "content" }, [_vm._v("我的")])
 }
 var staticRenderFns = []
 render._withStripped = true

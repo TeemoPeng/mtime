@@ -1,4 +1,4 @@
-<script>
+<script>    
 	export default {
 		onLaunch: function () {
 			console.log('App Launch')
@@ -22,18 +22,18 @@
 	view{font-size: 28upx;box-sizing: border-box;}	   
     .align-center{text-align: center;}
     ::-webkit-scrollbar {
-        width: 0;     
-        height: 0;
+        width: 0 !important;     
+        height: 0 !important;
     }
     ::-webkit-scrollbar-thumb {
         border-radius: 0;
         
-        background: none;
+        background: none !important;
     }
     ::-webkit-scrollbar-track {
         
-        border-radius: 0;
-        background: none;
+        border-radius: 0 !important;
+        background: none !important;
     }
     view{-webkit-overflow-scrolling:touch}
 
@@ -52,6 +52,7 @@
         height:var(--status-bar-height);
     }
     .flex-flow-row{display: flex;flex-flow: row;align-items: center;}
+    .flex-flow-column{display: flex;flex-flow: column;}
     .main{flex: 1;overflow: auto;margin-top: var(--status-bar-height);padding-top: $navigator-height;box-sizing: border-box;}
     /*uni-image{width: 100%;}*/
 </style>

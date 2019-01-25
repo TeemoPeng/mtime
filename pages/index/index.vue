@@ -22,7 +22,7 @@
 			<view class='weixin-holder'></view>
 			<!-- #endif -->
 		</view>
-		<view class='main'>
+		<view class='main'>		
 			<view class="page-section swiper">
 				<!--banner 无详情-->
                 <view class="page-section-spacing">
@@ -177,47 +177,16 @@
 			}
 		},
 		onLoad() {
-		
+			
+
 		},
 		onReady(){
-			const self = this;	
-			self.cityList = cityList.data;
-			
-			//定位
-			uni.getLocation({
-			    type: 'wgs84',
-			    success: function (res) {
-			    	//坐标转换 wgs84 => bd09 
-			    	var cjo2 = util.wgs84togcj02(res.longitude,res.latitude);
-			    	var bd09 = util.gcj02tobd09(cjo2[0],cjo2[1]);
-
-			    	//获取当前城市信息
-			      	util.getCityInfo(bd09[0],bd09[1]).then(res=>{
-			      		self.cityList.forEach(function(item,index){
-							if(self.city.indexOf(item.name) != -1){
-								self.city = item.name;
-								self.cityCode == item.id;	
-							}
-						})
-			      	});
-			    }
-			});
-
-			//热映购票，包含未上映
-			util.request({
-				url:'https://api-m.mtime.cn/PageSubArea/HotPlayMovies.api?locationId='+self.cityCode
-			}).then(res=>{
-				self.hotTicket = res;
-			});
-
-			//即将上映
-			//attention 首页
-			//moviecomings 所有即将上映影片
-			util.request({
-				url:'https://api-m.mtime.cn/Movie/MovieComingNew.api?locationId='+self.cityCode
-			}).then(res=>{
-				self.commingMovies = res;
-			})
+			let self = this;
+			self.init();
+		},
+		onPullDownRefresh(){
+			let self = this;
+			self.onPullDownRefresh();
 		},
 		methods: {
 			tabClick(){
@@ -235,7 +204,54 @@
 			},
 			rightButton(){
 
-			}
+			},
+			onPullDownRefresh() {
+				let self = this;
+				self.init();
+		        setTimeout(function () {
+		            uni.stopPullDownRefresh();
+		        }, 2000);
+		    },
+		    init(){
+				const self = this;	
+				self.cityList = cityList.data;	
+				
+				//定位
+				uni.getLocation({
+				    type: 'wgs84',
+				    success: function (res) {
+				    	//坐标转换 wgs84 => bd09 
+				    	var cjo2 = util.wgs84togcj02(res.longitude,res.latitude);
+				    	var bd09 = util.gcj02tobd09(cjo2[0],cjo2[1]);
+
+				    	//获取当前城市信息
+				      	util.getCityInfo(bd09[0],bd09[1]).then(res=>{
+				      		self.cityList.forEach(function(item,index){
+								if(self.city.indexOf(item.name) != -1){
+									self.city = item.name;
+									self.cityCode == item.id;	
+								}
+							})
+				      	});
+				    }
+				});
+
+				//热映购票，包含未上映
+				util.request({
+					url:'https://api-m.mtime.cn/PageSubArea/HotPlayMovies.api?locationId='+self.cityCode
+				}).then(res=>{
+					self.hotTicket = res;
+				});
+
+				//即将上映
+				//attention 首页
+				//moviecomings 所有即将上映影片
+				util.request({
+					url:'https://api-m.mtime.cn/Movie/MovieComingNew.api?locationId='+self.cityCode
+				}).then(res=>{
+					self.commingMovies = res;
+				})
+		    }
 		},
 		components:{
 		}
@@ -244,9 +260,9 @@
 
 <style lang="scss">
 	@import "static/css/base.scss";
-
+	
 	.header{height: $navigator-height;
-		display: flex;flex-flow: row;background: #1e2535;color: #fff;position: fixed;left: 0;top:var(--status-bar-height);width: 100%;z-index: 999;}
+		display: flex;flex-flow: row;background: #1e2535;color: #fff;position: fixed;left: 0;top:var(--status-bar-height);width: 100%;z-index: 999999;}
 
 	.nav{display: flex;flex-flow: row;align-items: center;overflow-x: auto;}
 	.search{min-width: 80upx;background-size: 65% auto;position: relative;}
@@ -286,7 +302,5 @@
 	.movie-name{text-align: center;display: inline-block;width: 100%;color: #3e3e3e;font-size:28upx;margin: 16upx 0 10upx 0;}
 	.buy-btn{padding: 12upx 32upx;color:#fff;background: linear-gradient(left,#e1ab6b,#ff6e3b);border-radius: 40upx;box-shadow: 2upx 2upx 4upx #fd9f45;font-size: 28upx;}
 	.all-network-hot{margin-top: 30upx;}
-
-
 
 </style>

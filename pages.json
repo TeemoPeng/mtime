@@ -1,7 +1,7 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
-			"path": "pages/index/index"
+			"path": "pages/index/index"			
 		},
 		{
 			"path": "pages/ticket/ticket"
@@ -14,13 +14,21 @@
 		},
 		{
 			"path": "pages/movies/movie-detail"
+		},
+		{
+			"path": "pages/movies/video-list"
+		},
+		{
+			"path": "pages/movies/img-list"
 		}
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
 		"navigationBarBackgroundColor": "#1e2535",
 		"backgroundColor": "#1e2535",
-		"navigationStyle":"custom"
+		"navigationStyle":"custom",
+		"enablePullDownRefresh":true,
+		"onReachBottomDistance":10
 	},
 	"tabBar":{
 		"color": "#333",

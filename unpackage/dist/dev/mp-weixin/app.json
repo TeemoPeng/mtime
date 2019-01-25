@@ -4,14 +4,17 @@
     "pages/ticket/ticket",
     "pages/video/video",
     "pages/mine/mine",
-    "pages/movies/movie-detail"
+    "pages/movies/movie-detail",
+    "pages/movies/video-list",
+    "pages/movies/img-list"
   ],
   "subPackages": [],
   "window": {
     "navigationBarTextStyle": "white",
     "navigationBarBackgroundColor": "#1e2535",
     "backgroundColor": "#1e2535",
-    "navigationStyle": "custom"
+    "navigationStyle": "custom",
+    "enablePullDownRefresh": true
   },
   "tabBar": {
     "color": "#333",
