@@ -69,7 +69,7 @@
 						<text class=''>热映购票</text>
 						<text class='hot-city'>{{city}}</text>
 					</view>
-					<view v-if='hotTicket.totalHotMovie' class='movie-number'>{{hotTicket.totalHotMovie}}部 <text class="iconfont icon-arrow-right"></text></view>
+					<!-- <view v-if='hotTicket.totalHotMovie' class='movie-number'>{{hotTicket.totalHotMovie}}部 <text class="iconfont icon-arrow-right"></text></view> -->
 				</view>
 				<view class='hot-movie-list'>
 					<view class="hot-movie-inner">
@@ -92,7 +92,7 @@
 					<view class='ticket-bar'>
 						<text class=''>即将上映</text>
 					</view>
-					<view class='movie-number'>全部 <text class="iconfont icon-arrow-right"></text></view>
+					<!-- <view class='movie-number'>全部 <text class="iconfont icon-arrow-right"></text></view> -->
 				</view>
 				<view class='hot-movie-list'>
 					<view class="hot-movie-inner">
@@ -163,11 +163,13 @@
 					movies:[
 						{},
 						{},
+						{},
 						{}
 					]
 				},
 				commingMovies:{
 					attention:[
+						{},
 						{},
 						{},
 						{}
@@ -207,49 +209,53 @@
 			},
 			onPullDownRefresh() {
 				let self = this;
-				self.init();
-		        setTimeout(function () {
-		            uni.stopPullDownRefresh();
-		        }, 2000);
+				self.init().then(()=>{
+		            uni.stopPullDownRefresh();					
+				});
 		    },
 		    init(){
 				const self = this;	
-				self.cityList = cityList.data;	
-				
-				//定位
-				uni.getLocation({
-				    type: 'wgs84',
-				    success: function (res) {
-				    	//坐标转换 wgs84 => bd09 
-				    	var cjo2 = util.wgs84togcj02(res.longitude,res.latitude);
-				    	var bd09 = util.gcj02tobd09(cjo2[0],cjo2[1]);
+				return new Promise((resolve,rejected)=>{
+					self.cityList = cityList.data;	
+					
+					//定位
+					uni.getLocation({
+					    type: 'wgs84',
+					    success: function (res) {
+					    	//坐标转换 wgs84 => bd09 
+					    	var cjo2 = util.wgs84togcj02(res.longitude,res.latitude);
+					    	var bd09 = util.gcj02tobd09(cjo2[0],cjo2[1]);
 
-				    	//获取当前城市信息
-				      	util.getCityInfo(bd09[0],bd09[1]).then(res=>{
-				      		self.cityList.forEach(function(item,index){
-								if(self.city.indexOf(item.name) != -1){
-									self.city = item.name;
-									self.cityCode == item.id;	
-								}
-							})
-				      	});
-				    }
-				});
+					    	//获取当前城市信息
+					      	util.getCityInfo(bd09[0],bd09[1]).then(res=>{
+					      		self.cityList.forEach(function(item,index){
+									if(self.city.indexOf(item.name) != -1){
+										self.city = item.name;
+										self.cityCode == item.id;	
+									}
+								})
+					      	});
+					    }
+					});
 
-				//热映购票，包含未上映
-				util.request({
-					url:'https://api-m.mtime.cn/PageSubArea/HotPlayMovies.api?locationId='+self.cityCode
-				}).then(res=>{
-					self.hotTicket = res;
-				});
+					//热映购票，包含未上映
+					util.request({
+						url:'https://api-m.mtime.cn/PageSubArea/HotPlayMovies.api?locationId='+self.cityCode
+					}).then(res=>{
+						self.hotTicket = res;
+					});
 
-				//即将上映
-				//attention 首页
-				//moviecomings 所有即将上映影片
-				util.request({
-					url:'https://api-m.mtime.cn/Movie/MovieComingNew.api?locationId='+self.cityCode
-				}).then(res=>{
-					self.commingMovies = res;
+					//即将上映
+					//attention 首页
+					//moviecomings 所有即将上映影片
+					util.request({
+						url:'https://api-m.mtime.cn/Movie/MovieComingNew.api?locationId='+self.cityCode
+					}).then(res=>{
+						self.commingMovies = res;
+						resolve();
+					}).catch(rej=>{
+						rejected();
+					})			
 				})
 		    }
 		},
@@ -294,8 +300,8 @@
 
 	.hot-movie-list{padding: 20upx;}
 	.hot-movie-inner{overflow-x: auto;flex-flow: row;display: flex;}
-	.img-wrap{position: relative;overflow: hidden;background: #e4dddd;border-radius: 8upx;height: 320upx;border:1px solid #f5ecec;}
-	.hot-movie-img{width: 222upx;height: 320upx;border-radius: 8upx;}
+	.img-wrap{position: relative;overflow: hidden;background: #e4dddd;border-radius: 8upx;height: 280upx;border:1px solid #f5ecec;}
+	.hot-movie-img{width: 200upx;height: 280upx;border-radius: 8upx;}
 	.hot-movie-item{margin:0 15upx 0 0;}
 
 	.movie-rating{position: absolute;right: 0;bottom: 0;border-radius: 8upx;background: #679f08;color: #fff;width: 60upx;height: 60upx;text-align: center;line-height: 60upx;}

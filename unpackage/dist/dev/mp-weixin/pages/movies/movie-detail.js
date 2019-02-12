@@ -331,39 +331,63 @@ var _navigator = _interopRequireDefault(__webpack_require__(/*! ../../components
   },
   onReady: function onReady() {
     var self = this;
-    _util.default.request({
-      url: 'https://ticket-api-m.mtime.cn/movie/detail.api?locationId=' + self.cityCode + '&movieId=' + self.movieId }).
-    then(function (res) {
-      self.titleText = res.data.basic.name;
-      self.movieDetail = res.data;
-      var year = self.movieDetail.basic.releaseDate.substring(0, 4),
-      month = self.movieDetail.basic.releaseDate.substring(4, 6),
-      day = self.movieDetail.basic.releaseDate.substring(6, 8);
-      self.releaseDate = year + '年' + month + '月' + day + '日';
-
-      var currentDate = new Date().getTime();
-      var releaseDate = new Date(year + '-' + month + '-' + day).getTime();
-
-      if (currentDate >= releaseDate) {
-        console.log('在线选座');
-        self.buyBtnText = '在线选座';
-      } else {
-        console.log('预售');
-        self.buyBtnText = '预售';
-      }
-
-      //获取评论                
-      _util.default.request({
-        url: 'https://ticket-api-m.mtime.cn/movie/hotComment.api?movieId=' + self.movieDetail.basic.movieId }).
-      then(function (res) {
-        self.comment = res.data;
-        self.comment.mini.list.forEach(function (item, index) {
-          item.commentDate = _util.default.formatDate('Y-m-d H:i:s', item.commentDate);
-        });
-      });
-    });
+    self.init();
+  },
+  onPullDownRefresh: function onPullDownRefresh() {
+    var self = this;
+    self.onPullDownRefresh();
   },
   methods: {
+    init: function init() {
+      var self = this;
+      return new Promise(function (resolve, rejected) {
+        _util.default.request({
+          url: 'https://ticket-api-m.mtime.cn/movie/detail.api?locationId=' + self.cityCode + '&movieId=' + self.movieId }).
+        then(function (res) {
+          self.titleText = res.data.basic.name;
+          self.movieDetail = res.data;
+          var year = self.movieDetail.basic.releaseDate.substring(0, 4),
+          month = self.movieDetail.basic.releaseDate.substring(4, 6),
+          day = self.movieDetail.basic.releaseDate.substring(6, 8);
+          self.releaseDate = year + '年' + month + '月' + day + '日';
+
+          var currentDate = new Date().getTime();
+          var releaseDate = new Date(year + '-' + month + '-' + day).getTime();
+
+          if (currentDate >= releaseDate) {
+            self.buyBtnText = '在线选座';
+          } else {
+            self.buyBtnText = '预售';
+          }
+
+          //获取评论                
+          _util.default.request({
+            url: 'https://ticket-api-m.mtime.cn/movie/hotComment.api?movieId=' + self.movieDetail.basic.movieId }).
+          then(function (res) {
+            self.comment = res.data;
+            self.comment.mini.list.forEach(function (item, index) {
+              item.commentDate = _util.default.formatDate('Y-m-d H:i:s', item.commentDate);
+            });
+            resolve();
+          }).catch(function (rej) {
+            rejected();
+          });
+        });
+      });
+    },
+    buyTicket: function buyTicket() {
+      var self = this;
+      uni.showToast({
+        title: '该功能尚未开发',
+        icon: 'none' });
+
+    },
+    onPullDownRefresh: function onPullDownRefresh() {
+      var self = this;
+      self.init().then(function (res) {
+        uni.stopPullDownRefresh();
+      });
+    },
     showMore: function showMore() {
       var self = this;
       if (self.showAllStory == '') {
@@ -388,7 +412,11 @@ var _navigator = _interopRequireDefault(__webpack_require__(/*! ../../components
       });
     },
     goMiniCommentList: function goMiniCommentList() {
+      //所有短评
       var self = this;
+      uni.navigateTo({
+        url: '/pages/movies/mini-comment?movieId=' + self.movieDetail.basic.movieId });
+
     },
     goVideoList: function goVideoList() {
       //视频、预告片列表
@@ -695,7 +723,22 @@ var render = function() {
                         "view",
                         { staticClass: "movie-items movie-short-comment" },
                         [
-                          _vm._m(6),
+                          _c("view", { staticClass: "item-title" }, [
+                            _vm._m(6),
+                            _c("view", [
+                              _c(
+                                "text",
+                                {
+                                  attrs: { eventid: "3fa056aa-3" },
+                                  on: { tap: _vm.goMiniCommentList }
+                                },
+                                [_vm._v("全部")]
+                              ),
+                              _c("text", {
+                                staticClass: "iconfont icon-arrow-right"
+                              })
+                            ])
+                          ]),
                           _c(
                             "view",
                             { staticClass: "comment-content" },
@@ -837,7 +880,7 @@ var render = function() {
                                       "text",
                                       {
                                         staticClass: "color-green",
-                                        attrs: { eventid: "3fa056aa-3" },
+                                        attrs: { eventid: "3fa056aa-4" },
                                         on: { tap: _vm.goMiniCommentList }
                                       },
                                       [
@@ -907,12 +950,40 @@ var render = function() {
             : _vm._e()
         ]),
         _c("view", { staticClass: "main-footer" }, [
-          _vm._m(8),
-          _vm._m(9),
+          _c(
+            "view",
+            {
+              staticClass: "foot-like foot-txt",
+              attrs: { eventid: "3fa056aa-5" },
+              on: { tap: _vm.buyTicket }
+            },
+            [
+              _c("text", { staticClass: "iconfont icon-like" }),
+              _c("text", {}, [_vm._v("想看")])
+            ]
+          ),
+          _c(
+            "view",
+            {
+              staticClass: "foot-comment foot-txt",
+              attrs: { eventid: "3fa056aa-6" },
+              on: { tap: _vm.buyTicket }
+            },
+            [
+              _c("text", { staticClass: "iconfont icon-edit" }),
+              _c("text", {}, [_vm._v("评论/评分")])
+            ]
+          ),
           _c("view", { staticClass: "foot-buy" }, [
-            _c("text", { staticClass: "buy-btn" }, [
-              _vm._v(_vm._s(_vm.buyBtnText))
-            ])
+            _c(
+              "text",
+              {
+                staticClass: "buy-btn",
+                attrs: { eventid: "3fa056aa-7" },
+                on: { tap: _vm.buyTicket }
+              },
+              [_vm._v(_vm._s(_vm.buyBtnText))]
+            )
           ])
         ])
       ])
@@ -947,7 +1018,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("text", [
-      _vm._v("票房排名 "),
+      _vm._v("票房排名"),
       _c("text", { staticClass: "iconfont icon-arrow-right" })
     ])
   },
@@ -956,7 +1027,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("text", [
-      _vm._v("今日实时（万） "),
+      _vm._v("今日实时（万）"),
       _c("text", { staticClass: "iconfont icon-arrow-right" })
     ])
   },
@@ -965,7 +1036,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("text", [
-      _vm._v("累计票房（万） "),
+      _vm._v("累计票房（万）"),
       _c("text", { staticClass: "iconfont icon-arrow-right" })
     ])
   },
@@ -973,13 +1044,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "item-title" }, [
-      _c("view", [_c("text", {}, [_vm._v("短评")])]),
-      _c("view", [
-        _c("text", {}, [_vm._v("全部")]),
-        _c("text", { staticClass: "iconfont icon-arrow-right" })
-      ])
-    ])
+    return _c("view", [_c("text", {}, [_vm._v("短评")])])
   },
   function() {
     var _vm = this
@@ -991,24 +1056,6 @@ var staticRenderFns = [
         _c("text", {}, [_vm._v("全部")]),
         _c("text", { staticClass: "iconfont icon-arrow-right" })
       ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "foot-like foot-txt" }, [
-      _c("text", { staticClass: "iconfont icon-like" }),
-      _c("text", {}, [_vm._v("想看")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "foot-comment foot-txt" }, [
-      _c("text", { staticClass: "iconfont icon-edit" }),
-      _c("text", {}, [_vm._v("评论/评分")])
     ])
   }
 ]

@@ -278,11 +278,13 @@ var _cityList = _interopRequireDefault(__webpack_require__(/*! ../../common/city
         movies: [
         {},
         {},
+        {},
         {}] },
 
 
       commingMovies: {
         attention: [
+        {},
         {},
         {},
         {}] } };
@@ -297,43 +299,7 @@ var _cityList = _interopRequireDefault(__webpack_require__(/*! ../../common/city
   },
   onReady: function onReady() {
     var self = this;
-    self.cityList = _cityList.default.data;
-
-    //定位
-    uni.getLocation({
-      type: 'wgs84',
-      success: function success(res) {
-        //坐标转换 wgs84 => bd09 
-        var cjo2 = _util.default.wgs84togcj02(res.longitude, res.latitude);
-        var bd09 = _util.default.gcj02tobd09(cjo2[0], cjo2[1]);
-
-        //获取当前城市信息
-        _util.default.getCityInfo(bd09[0], bd09[1]).then(function (res) {
-          self.cityList.forEach(function (item, index) {
-            if (self.city.indexOf(item.name) != -1) {
-              self.city = item.name;
-              self.cityCode == item.id;
-            }
-          });
-        });
-      } });
-
-
-    //热映购票，包含未上映
-    _util.default.request({
-      url: 'https://api-m.mtime.cn/PageSubArea/HotPlayMovies.api?locationId=' + self.cityCode }).
-    then(function (res) {
-      self.hotTicket = res;
-    });
-
-    //即将上映
-    //attention 首页
-    //moviecomings 所有即将上映影片
-    _util.default.request({
-      url: 'https://api-m.mtime.cn/Movie/MovieComingNew.api?locationId=' + self.cityCode }).
-    then(function (res) {
-      self.commingMovies = res;
-    });
+    self.init();
   },
   onPullDownRefresh: function onPullDownRefresh() {
     var self = this;
@@ -357,10 +323,55 @@ var _cityList = _interopRequireDefault(__webpack_require__(/*! ../../common/city
 
     },
     onPullDownRefresh: function onPullDownRefresh() {
-      console.log('refresh');
-      setTimeout(function () {
+      var self = this;
+      self.init().then(function () {
         uni.stopPullDownRefresh();
-      }, 1000);
+      });
+    },
+    init: function init() {
+      var self = this;
+      return new Promise(function (resolve, rejected) {
+        self.cityList = _cityList.default.data;
+
+        //定位
+        uni.getLocation({
+          type: 'wgs84',
+          success: function success(res) {
+            //坐标转换 wgs84 => bd09 
+            var cjo2 = _util.default.wgs84togcj02(res.longitude, res.latitude);
+            var bd09 = _util.default.gcj02tobd09(cjo2[0], cjo2[1]);
+
+            //获取当前城市信息
+            _util.default.getCityInfo(bd09[0], bd09[1]).then(function (res) {
+              self.cityList.forEach(function (item, index) {
+                if (self.city.indexOf(item.name) != -1) {
+                  self.city = item.name;
+                  self.cityCode == item.id;
+                }
+              });
+            });
+          } });
+
+
+        //热映购票，包含未上映
+        _util.default.request({
+          url: 'https://api-m.mtime.cn/PageSubArea/HotPlayMovies.api?locationId=' + self.cityCode }).
+        then(function (res) {
+          self.hotTicket = res;
+        });
+
+        //即将上映
+        //attention 首页
+        //moviecomings 所有即将上映影片
+        _util.default.request({
+          url: 'https://api-m.mtime.cn/Movie/MovieComingNew.api?locationId=' + self.cityCode }).
+        then(function (res) {
+          self.commingMovies = res;
+          resolve();
+        }).catch(function (rej) {
+          rejected();
+        });
+      });
     } },
 
   components: {} };exports.default = _default;
@@ -490,13 +501,7 @@ var render = function() {
           _c("view", { staticClass: "ticket-bar" }, [
             _c("text", {}, [_vm._v("热映购票")]),
             _c("text", { staticClass: "hot-city" }, [_vm._v(_vm._s(_vm.city))])
-          ]),
-          _vm.hotTicket.totalHotMovie
-            ? _c("view", { staticClass: "movie-number" }, [
-                _vm._v(_vm._s(_vm.hotTicket.totalHotMovie) + "部"),
-                _c("text", { staticClass: "iconfont icon-arrow-right" })
-              ])
-            : _vm._e()
+          ])
         ]),
         _c("view", { staticClass: "hot-movie-list" }, [
           _c(
@@ -627,10 +632,6 @@ var staticRenderFns = [
     return _c("view", { staticClass: "hot-ticket" }, [
       _c("view", { staticClass: "ticket-bar" }, [
         _c("text", {}, [_vm._v("即将上映")])
-      ]),
-      _c("view", { staticClass: "movie-number" }, [
-        _vm._v("全部"),
-        _c("text", { staticClass: "iconfont icon-arrow-right" })
       ])
     ])
   }

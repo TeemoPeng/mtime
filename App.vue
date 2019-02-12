@@ -1,4 +1,5 @@
-<script>    
+<script>        
+    
 	export default {
 		onLaunch: function () {
 			console.log('App Launch')
@@ -16,7 +17,7 @@
 	/*每个页面公共css */
     @import "static/font/iconfont.css";
     @import "static/css/base.scss";
-
+    uni-page-refresh{top:$navigator-height;position: fixed;z-index: 999999;}
 	uni-page-body{height: 100%;} 
 	.content{height: 100%;display: flex;flex-flow: column;}	
 	view{font-size: 28upx;box-sizing: border-box;}	   
@@ -54,5 +55,6 @@
     .flex-flow-row{display: flex;flex-flow: row;align-items: center;}
     .flex-flow-column{display: flex;flex-flow: column;}
     .main{flex: 1;overflow: auto;margin-top: var(--status-bar-height);padding-top: $navigator-height;box-sizing: border-box;}
+    .loading{text-align:center; line-height:80px;}
     /*uni-image{width: 100%;}*/
 </style>

@@ -2,6 +2,7 @@ const x_PI = 3.14159265358979324 * 3000.0 / 180.0;
 const PI = 3.1415926535897932384626;
 const a = 6378245.0;
 const ee = 0.00669342162296594323;
+// import api from 'common/api'
 let util = {
 	/**
 	 * 百度坐标系 (BD-09) 与 火星坐标系 (GCJ-02)的转换
@@ -119,16 +120,16 @@ let util = {
 	 * @return {[type]}    
 	 */
 	getCityInfo(lng,lat){
-	     return new Promise(function(resolve,rejected){
+	    return new Promise(function(resolve,rejected){
 	     	//百度地图web API 逆地理解析
-		     util.request({
+		    util.request({
 		        	url:'http://api.map.baidu.com/geocoder/v2/?callback=?&location='+lat+','+lng+'&output=json&ak=s1fxz45Ttt9PsG8ZbwKfaymgoYWozpQW'
-		     }).then(res=>{
+		    }).then(res=>{
 		     	resolve(res);
-		     }).catch(res=>{
+		    }).catch(res=>{
 		     	rejected(res);
-		     });
-	     });
+		    });
+	    });
 	},
 	request(option){
 		return new Promise((resolve,rejected)=>{
@@ -144,11 +145,11 @@ let util = {
 				},
 				fail(res){
 					uni.showToast({
-		        			title:'请求失败，请稍后重试',
-		        			icon:'none',
-		        			duration:2000
-		        		})
-		        		rejected(res);
+	        			title:'请求失败，请稍后重试',
+	        			icon:'none',
+	        			duration:2000
+	        		})
+	        		rejected(res);
 				},
 				complete:option.complete
 			})

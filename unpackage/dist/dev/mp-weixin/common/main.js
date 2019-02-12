@@ -71,6 +71,21 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "../../../../../../projects/test/uni-app/mtime/common/api.js":
+/*!****************************************************!*\
+  !*** D:/projects/test/uni-app/mtime/common/api.js ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var API = {
+  getMinComents: 'https://api-m.mtime.cn/Showtime/HotMovieComments.api' };var _default =
+
+API;exports.default = _default;
+
+/***/ }),
+
 /***/ "../../../../../../projects/test/uni-app/mtime/main.js":
 /*!**********************************************!*\
   !*** D:/projects/test/uni-app/mtime/main.js ***!
@@ -81,7 +96,9 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__(/*! uni-pages */ "../../../../../../projects/test/uni-app/mtime/pages.json");
 var _vue = _interopRequireDefault(__webpack_require__(/*! vue */ "./node_modules/@dcloudio/vue-cli-plugin-uni/packages/mpvue/index.js"));
-var _App = _interopRequireDefault(__webpack_require__(/*! ./App */ "../../../../../../projects/test/uni-app/mtime/App.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};var ownKeys = Object.keys(source);if (typeof Object.getOwnPropertySymbols === 'function') {ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {return Object.getOwnPropertyDescriptor(source, sym).enumerable;}));}ownKeys.forEach(function (key) {_defineProperty(target, key, source[key]);});}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+var _App = _interopRequireDefault(__webpack_require__(/*! ./App */ "../../../../../../projects/test/uni-app/mtime/App.vue"));
+var _api = _interopRequireDefault(__webpack_require__(/*! common/api */ "../../../../../../projects/test/uni-app/mtime/common/api.js"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};var ownKeys = Object.keys(source);if (typeof Object.getOwnPropertySymbols === 'function') {ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {return Object.getOwnPropertyDescriptor(source, sym).enumerable;}));}ownKeys.forEach(function (key) {_defineProperty(target, key, source[key]);});}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+_vue.default.prototype.api = _api.default;
 
 _vue.default.config.productionTip = false;
 
@@ -103,6 +120,7 @@ app.$mount();
 
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default =
+
 {
   onLaunch: function onLaunch() {
     console.log('App Launch');

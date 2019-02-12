@@ -4151,6 +4151,7 @@ cityList;exports.default = _default;
 var PI = 3.1415926535897932384626;
 var a = 6378245.0;
 var ee = 0.00669342162296594323;
+// import api from 'common/api'
 var util = {
   /**
               * 百度坐标系 (BD-09) 与 火星坐标系 (GCJ-02)的转换
@@ -10453,9 +10454,9 @@ try {
             return
         }
 
-        var data = formatVmData(this)
+        var data = JSON.parse(JSON.stringify(formatVmData(this)))
         //fixed by xxxxxx
-        throttleSetData(page.setData.bind(page), JSON.parse(JSON.stringify(diff(data, page.data))))
+        throttleSetData(page.setData.bind(page), diff(data, page.data))
     }
 
     function initDataToMP() {

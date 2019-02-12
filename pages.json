@@ -20,6 +20,9 @@
 		},
 		{
 			"path": "pages/movies/img-list"
+		},
+		{
+			"path": "pages/movies/mini-comment"
 		}
 	],
 	"globalStyle": {
@@ -28,7 +31,7 @@
 		"backgroundColor": "#1e2535",
 		"navigationStyle":"custom",
 		"enablePullDownRefresh":true,
-		"onReachBottomDistance":10
+		"onReachBottomDistance":0
 	},
 	"tabBar":{
 		"color": "#333",

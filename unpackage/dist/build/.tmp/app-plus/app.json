@@ -17,6 +17,7 @@
     "enablePullDownRefresh": true,
     "onReachBottomDistance": 10
   },
+  "usingComponents": {},
   "tabBar": {
     "color": "#333",
     "selectedColor": "#FA7E40",

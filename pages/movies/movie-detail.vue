@@ -102,7 +102,7 @@
                             <!--短评-->
                             <view class="item-title">
                                 <view><text class=''>短评</text></view>
-                                <view><text class=''>全部</text> <text class="iconfont icon-arrow-right"></text></view>
+                                <view><text class=''  @tap='goMiniCommentList'>全部</text> <text class="iconfont icon-arrow-right"></text></view>
                             </view>
                             <view class='comment-content'>
                                 <view class="comment-list" v-for='(item,index) in comment.mini.list' v-if='comment' :key='index'>
@@ -163,16 +163,16 @@
             </view>
             <view class="main-footer">
                 <!--底部-->
-                <view class='foot-like foot-txt'>
+                <view class='foot-like foot-txt' @tap='buyTicket'>
                     <text class='iconfont icon-like'></text>
                     <text class=''>想看</text>
                 </view>
-                <view class='foot-comment foot-txt'>
+                <view class='foot-comment foot-txt' @tap='buyTicket'>
                     <text class='iconfont icon-edit'></text>
                     <text class=''>评论/评分</text>
                 </view>
                 <view class='foot-buy'>
-                    <text class='buy-btn'>{{buyBtnText}}</text>
+                    <text class='buy-btn' @tap='buyTicket'>{{buyBtnText}}</text>
                 </view>
             </view>
         </view>
@@ -216,39 +216,63 @@
         },
         onReady(){
             let self = this;
-            util.request({
-                url:'https://ticket-api-m.mtime.cn/movie/detail.api?locationId='+self.cityCode+'&movieId='+self.movieId
-            }).then(res=>{
-                self.titleText = res.data.basic.name;
-                self.movieDetail = res.data;
-                let year = self.movieDetail.basic.releaseDate.substring(0,4),
-                    month = self.movieDetail.basic.releaseDate.substring(4,6),
-                    day = self.movieDetail.basic.releaseDate.substring(6,8);
-                self.releaseDate = year+'年'+month+'月'+day+'日';
-
-                let currentDate = new Date().getTime();
-                let releaseDate = (new Date(year+'-'+month+'-'+day)).getTime();
-
-                if(currentDate >= releaseDate){
-                    console.log('在线选座');
-                    self.buyBtnText = '在线选座';
-                }else{
-                    console.log('预售');
-                    self.buyBtnText = '预售';
-                }
-
-                //获取评论                
-                util.request({
-                    url:'https://ticket-api-m.mtime.cn/movie/hotComment.api?movieId='+self.movieDetail.basic.movieId
-                }).then(res=>{
-                    self.comment = res.data;                    
-                    self.comment.mini.list.forEach((item,index)=>{
-                        item.commentDate= util.formatDate('Y-m-d H:i:s',item.commentDate);
-                    })
-                })
-            })
+            self.init();
+        },
+        onPullDownRefresh(){
+            let self = this;
+            self.onPullDownRefresh();
         },
         methods: {
+            init(){
+                let self = this;
+                return new Promise((resolve,rejected)=>{
+                    util.request({
+                        url:'https://ticket-api-m.mtime.cn/movie/detail.api?locationId='+self.cityCode+'&movieId='+self.movieId
+                    }).then(res=>{
+                        self.titleText = res.data.basic.name;
+                        self.movieDetail = res.data;
+                        let year = self.movieDetail.basic.releaseDate.substring(0,4),
+                            month = self.movieDetail.basic.releaseDate.substring(4,6),
+                            day = self.movieDetail.basic.releaseDate.substring(6,8);
+                        self.releaseDate = year+'年'+month+'月'+day+'日';
+
+                        let currentDate = new Date().getTime();
+                        let releaseDate = (new Date(year+'-'+month+'-'+day)).getTime();
+
+                        if(currentDate >= releaseDate){
+                            self.buyBtnText = '在线选座';
+                        }else{
+                            self.buyBtnText = '预售';
+                        }
+
+                        //获取评论                
+                        util.request({
+                            url:'https://ticket-api-m.mtime.cn/movie/hotComment.api?movieId='+self.movieDetail.basic.movieId
+                        }).then(res=>{
+                            self.comment = res.data;                    
+                            self.comment.mini.list.forEach((item,index)=>{
+                                item.commentDate= util.formatDate('Y-m-d H:i:s',item.commentDate);
+                            })
+                            resolve();
+                        }).catch(rej=>{
+                            rejected();
+                        })
+                    })                    
+                })
+            },
+            buyTicket(){
+                let self = this;
+                uni.showToast({
+                    title:'该功能尚未开发',
+                    icon:'none'
+                })
+            },
+            onPullDownRefresh() {
+                let self = this;
+                self.init().then(res=>{
+                    uni.stopPullDownRefresh();                    
+                });
+            },
             showMore(){
                 let self = this;
                 if(self.showAllStory == ''){
@@ -273,7 +297,11 @@
                 })
             },
             goMiniCommentList(){
+                //所有短评
                 let self = this;
+                uni.navigateTo({
+                    url:'/pages/movies/mini-comment?movieId='+self.movieDetail.basic.movieId
+                })
             },
             goVideoList(){
                 //视频、预告片列表
