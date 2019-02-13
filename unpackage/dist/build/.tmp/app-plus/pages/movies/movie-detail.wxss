@@ -612,7 +612,7 @@
           align-items: center;
 }
 .more-comment {
-  padding-top: 20rpx;
+  padding: 40rpx 0 20rpx 0;
   text-align: center;
 }
 .movie-long-comment {

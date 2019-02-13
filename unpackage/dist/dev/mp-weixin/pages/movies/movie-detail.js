@@ -295,9 +295,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var _util = _interopRequireDefault(__webpack_require__(/*! ../../common/util */ "../../../../../../projects/test/uni-app/mtime/common/util.js"));
-var _cityList = _interopRequireDefault(__webpack_require__(/*! ../../common/cityList */ "../../../../../../projects/test/uni-app/mtime/common/cityList.js"));
-var _navigator = _interopRequireDefault(__webpack_require__(/*! ../../components/navigator */ "../../../../../../projects/test/uni-app/mtime/components/navigator.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
+var _util = _interopRequireDefault(__webpack_require__(/*! @/common/util */ "../../../../../../projects/test/uni-app/mtime/common/util.js"));
+var _cityList = _interopRequireDefault(__webpack_require__(/*! @/common/cityList */ "../../../../../../projects/test/uni-app/mtime/common/cityList.js"));
+var _navigator = _interopRequireDefault(__webpack_require__(/*! @/components/navigator */ "../../../../../../projects/test/uni-app/mtime/components/navigator.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
 {
   data: function data() {
     return {
@@ -341,8 +341,11 @@ var _navigator = _interopRequireDefault(__webpack_require__(/*! ../../components
     init: function init() {
       var self = this;
       return new Promise(function (resolve, rejected) {
-        _util.default.request({
-          url: 'https://ticket-api-m.mtime.cn/movie/detail.api?locationId=' + self.cityCode + '&movieId=' + self.movieId }).
+        self.api.getMovieDetail({
+          data: {
+            locationId: self.cityCode,
+            movieId: self.movieId } }).
+
         then(function (res) {
           self.titleText = res.data.basic.name;
           self.movieDetail = res.data;
@@ -359,11 +362,14 @@ var _navigator = _interopRequireDefault(__webpack_require__(/*! ../../components
           } else {
             self.buyBtnText = '预售';
           }
+        }).then(function () {
+          self.api.getMovieComment({
+            host: self.host.ticket,
+            data: {
+              movieId: self.movieId } }).
 
-          //获取评论                
-          _util.default.request({
-            url: 'https://ticket-api-m.mtime.cn/movie/hotComment.api?movieId=' + self.movieDetail.basic.movieId }).
           then(function (res) {
+            console.log('comment:', res);
             self.comment = res.data;
             self.comment.mini.list.forEach(function (item, index) {
               item.commentDate = _util.default.formatDate('Y-m-d H:i:s', item.commentDate);
@@ -373,13 +379,49 @@ var _navigator = _interopRequireDefault(__webpack_require__(/*! ../../components
             rejected();
           });
         });
+
+        // util.request({
+        //     url:'https://ticket-api-m.mtime.cn/movie/detail.api?locationId='+self.cityCode+'&movieId='+self.movieId
+        // }).then(res=>{
+        //     self.titleText = res.data.basic.name;
+        //     self.movieDetail = res.data;
+        //     let year = self.movieDetail.basic.releaseDate.substring(0,4),
+        //         month = self.movieDetail.basic.releaseDate.substring(4,6),
+        //         day = self.movieDetail.basic.releaseDate.substring(6,8);
+        //     self.releaseDate = year+'年'+month+'月'+day+'日';
+
+        //     let currentDate = new Date().getTime();
+        //     let releaseDate = (new Date(year+'-'+month+'-'+day)).getTime();
+
+        //     if(currentDate >= releaseDate){
+        //         self.buyBtnText = '在线选座';
+        //     }else{
+        //         self.buyBtnText = '预售';
+        //     }
+
+        //     //获取评论                
+        //     util.request({
+        //         url:'https://ticket-api-m.mtime.cn/movie/hotComment.api?movieId='+self.movieDetail.basic.movieId
+        //     }).then(res=>{
+        //         self.comment = res.data;                    
+        //         self.comment.mini.list.forEach((item,index)=>{
+        //             item.commentDate= util.formatDate('Y-m-d H:i:s',item.commentDate);
+        //         })
+        //         resolve();
+        //     }).catch(rej=>{
+        //         rejected();
+        //     })
+        // })                    
       });
     },
     buyTicket: function buyTicket() {
       var self = this;
-      uni.showToast({
-        title: '该功能尚未开发',
-        icon: 'none' });
+      // uni.showToast({
+      //     title:'该功能尚未开发',
+      //     icon:'none'
+      // })
+      uni.navigateTo({
+        url: 'cinemas?movieName=' + self.movieDetail.basic.name });
 
     },
     onPullDownRefresh: function onPullDownRefresh() {
@@ -703,7 +745,14 @@ var render = function() {
                               _vm._s(_vm.movieDetail.boxOffice.todayBoxDes)
                             )
                           ]),
-                          _vm._m(4)
+                          _c("text", [
+                            _vm._v(
+                              _vm._s(_vm.movieDetail.boxOffice.todayBoxDesUnit)
+                            ),
+                            _c("text", {
+                              staticClass: "iconfont icon-arrow-right"
+                            })
+                          ])
                         ]),
                         _c("view", { staticClass: "office-item" }, [
                           _c("text", [
@@ -711,7 +760,14 @@ var render = function() {
                               _vm._s(_vm.movieDetail.boxOffice.totalBoxDes)
                             )
                           ]),
-                          _vm._m(5)
+                          _c("text", [
+                            _vm._v(
+                              _vm._s(_vm.movieDetail.boxOffice.totalBoxUnit)
+                            ),
+                            _c("text", {
+                              staticClass: "iconfont icon-arrow-right"
+                            })
+                          ])
                         ])
                       ])
                     : _vm._e(),
@@ -724,7 +780,7 @@ var render = function() {
                         { staticClass: "movie-items movie-short-comment" },
                         [
                           _c("view", { staticClass: "item-title" }, [
-                            _vm._m(6),
+                            _vm._m(4),
                             _c("view", [
                               _c(
                                 "text",
@@ -905,7 +961,7 @@ var render = function() {
                         "view",
                         { staticClass: "movie-items movie-long-comment" },
                         [
-                          _vm._m(7),
+                          _vm._m(5),
                           _c("view", { staticClass: "item-long-comment" }, [
                             _c("view", { staticClass: "long-content" }, [
                               _c("text", {}, [
@@ -955,7 +1011,7 @@ var render = function() {
             {
               staticClass: "foot-like foot-txt",
               attrs: { eventid: "3fa056aa-5" },
-              on: { tap: _vm.buyTicket }
+              on: { tap: function($event) {} }
             },
             [
               _c("text", { staticClass: "iconfont icon-like" }),
@@ -967,7 +1023,7 @@ var render = function() {
             {
               staticClass: "foot-comment foot-txt",
               attrs: { eventid: "3fa056aa-6" },
-              on: { tap: _vm.buyTicket }
+              on: { tap: function($event) {} }
             },
             [
               _c("text", { staticClass: "iconfont icon-edit" }),
@@ -1019,24 +1075,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("text", [
       _vm._v("票房排名"),
-      _c("text", { staticClass: "iconfont icon-arrow-right" })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("text", [
-      _vm._v("今日实时（万）"),
-      _c("text", { staticClass: "iconfont icon-arrow-right" })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("text", [
-      _vm._v("累计票房（万）"),
       _c("text", { staticClass: "iconfont icon-arrow-right" })
     ])
   },

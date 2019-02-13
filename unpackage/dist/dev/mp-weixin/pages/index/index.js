@@ -226,8 +226,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var _util = _interopRequireDefault(__webpack_require__(/*! ../../common/util */ "../../../../../../projects/test/uni-app/mtime/common/util.js"));
-var _cityList = _interopRequireDefault(__webpack_require__(/*! ../../common/cityList */ "../../../../../../projects/test/uni-app/mtime/common/cityList.js"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
+
+
+var _util = _interopRequireDefault(__webpack_require__(/*! @/common/util */ "../../../../../../projects/test/uni-app/mtime/common/util.js"));
+var _cityList = _interopRequireDefault(__webpack_require__(/*! @/common/cityList */ "../../../../../../projects/test/uni-app/mtime/common/cityList.js"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
 {
   data: function data() {
     return {
@@ -342,7 +344,10 @@ var _cityList = _interopRequireDefault(__webpack_require__(/*! ../../common/city
             var bd09 = _util.default.gcj02tobd09(cjo2[0], cjo2[1]);
 
             //获取当前城市信息
-            _util.default.getCityInfo(bd09[0], bd09[1]).then(function (res) {
+            self.api.getCityInfo({
+              lat: bd09[1],
+              lng: bd09[0] }).
+            then(function (res) {
               self.cityList.forEach(function (item, index) {
                 if (self.city.indexOf(item.name) != -1) {
                   self.city = item.name;
@@ -353,23 +358,27 @@ var _cityList = _interopRequireDefault(__webpack_require__(/*! ../../common/city
           } });
 
 
+
+
         //热映购票，包含未上映
-        _util.default.request({
-          url: 'https://api-m.mtime.cn/PageSubArea/HotPlayMovies.api?locationId=' + self.cityCode }).
+        self.api.getHotPlayMovies({
+          data: {
+            locationIdtionId: self.cityCode } }).
+
         then(function (res) {
           self.hotTicket = res;
-        });
+        }).then(function () {
+          //即将上映
+          self.api.getMovieComingNew({
+            data: {
+              locationId: self.cityCode } }).
 
-        //即将上映
-        //attention 首页
-        //moviecomings 所有即将上映影片
-        _util.default.request({
-          url: 'https://api-m.mtime.cn/Movie/MovieComingNew.api?locationId=' + self.cityCode }).
-        then(function (res) {
-          self.commingMovies = res;
-          resolve();
-        }).catch(function (rej) {
-          rejected();
+          then(function (res) {
+            self.commingMovies = res;
+            resolve();
+          }).catch(function (rej) {
+            rejected();
+          });
         });
       });
     } },
@@ -456,144 +465,152 @@ var render = function() {
       _c("view", { staticClass: "weixin-holder" })
     ]),
     _c("view", { staticClass: "main" }, [
-      _c("view", { staticClass: "page-section swiper" }, [
-        _c(
-          "view",
-          { staticClass: "page-section-spacing" },
-          [
+      _c("view", { staticClass: "main-inner" }, [
+        _c("view", { staticClass: "page-section swiper" }, [
+          _c(
+            "view",
+            { staticClass: "page-section-spacing" },
+            [
+              _c(
+                "swiper",
+                {
+                  staticClass: "swiper",
+                  attrs: {
+                    "indicator-dots": _vm.indicatorDots,
+                    autoplay: _vm.autoplay,
+                    interval: _vm.interval,
+                    duration: _vm.duration,
+                    circular: _vm.circular,
+                    "indicator-color": "#f3f3f3",
+                    "indicator-active-color": "#568ad8"
+                  }
+                },
+                [
+                  _c("swiper-item", { attrs: { mpcomid: "42f26a26-0" } }, [
+                    _c("view", { staticClass: "swiper-item banner banner_01" })
+                  ]),
+                  _c("swiper-item", { attrs: { mpcomid: "42f26a26-1" } }, [
+                    _c("view", { staticClass: "swiper-item banner banner_02" })
+                  ]),
+                  _c("swiper-item", { attrs: { mpcomid: "42f26a26-2" } }, [
+                    _c("view", { staticClass: "swiper-item banner banner_03" })
+                  ]),
+                  _c("swiper-item", { attrs: { mpcomid: "42f26a26-3" } }, [
+                    _c("view", { staticClass: "swiper-item banner banner_04" })
+                  ])
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ]),
+        _vm._m(0),
+        _c("view", { staticClass: "hot-ticket-wrap" }, [
+          _c("view", { staticClass: "hot-ticket" }, [
+            _c("view", { staticClass: "ticket-bar" }, [
+              _c("text", {}, [_vm._v("热映购票")]),
+              _c("text", { staticClass: "hot-city" }, [
+                _vm._v(_vm._s(_vm.city))
+              ])
+            ])
+          ]),
+          _c("view", { staticClass: "hot-movie-list" }, [
             _c(
-              "swiper",
-              {
-                staticClass: "swiper",
-                attrs: {
-                  "indicator-dots": _vm.indicatorDots,
-                  autoplay: _vm.autoplay,
-                  interval: _vm.interval,
-                  duration: _vm.duration,
-                  circular: _vm.circular,
-                  "indicator-color": "#f3f3f3",
-                  "indicator-active-color": "#568ad8"
-                }
-              },
-              [
-                _c("swiper-item", { attrs: { mpcomid: "42f26a26-0" } }, [
-                  _c("view", { staticClass: "swiper-item banner banner_01" })
-                ]),
-                _c("swiper-item", { attrs: { mpcomid: "42f26a26-1" } }, [
-                  _c("view", { staticClass: "swiper-item banner banner_02" })
-                ]),
-                _c("swiper-item", { attrs: { mpcomid: "42f26a26-2" } }, [
-                  _c("view", { staticClass: "swiper-item banner banner_03" })
-                ]),
-                _c("swiper-item", { attrs: { mpcomid: "42f26a26-3" } }, [
-                  _c("view", { staticClass: "swiper-item banner banner_04" })
-                ])
-              ],
-              1
+              "view",
+              { staticClass: "hot-movie-inner" },
+              _vm._l(_vm.hotTicket.movies, function(item, index) {
+                return _vm.hotTicket.movies.length > 0
+                  ? _c(
+                      "view",
+                      { key: item.movieId, staticClass: "hot-movie-item" },
+                      [
+                        _c(
+                          "view",
+                          {
+                            staticClass: "img-wrap",
+                            attrs: { eventid: "42f26a26-3-" + index },
+                            on: {
+                              tap: function($event) {
+                                _vm.movieDetail(item)
+                              }
+                            }
+                          },
+                          [
+                            _c("image", {
+                              staticClass: "hot-movie-img",
+                              attrs: { src: item.img, mode: "aspectFill" }
+                            }),
+                            item.ratingFinal != -1 && item.movieId
+                              ? _c("view", { staticClass: "movie-rating" }, [
+                                  _vm._v(_vm._s(item.ratingFinal))
+                                ])
+                              : _vm._e()
+                          ]
+                        ),
+                        _c("text", { staticClass: "movie-name" }, [
+                          _vm._v(_vm._s(item.titleCn))
+                        ]),
+                        item.movieId
+                          ? _c(
+                              "view",
+                              {
+                                staticClass: "align-center",
+                                staticStyle: { padding: "20rpx 0" }
+                              },
+                              [
+                                _c("text", { staticClass: "buy-btn" }, [
+                                  _vm._v("购票")
+                                ])
+                              ]
+                            )
+                          : _vm._e()
+                      ]
+                    )
+                  : _vm._e()
+              })
             )
-          ],
-          1
-        )
-      ]),
-      _vm._m(0),
-      _c("view", { staticClass: "hot-ticket-wrap" }, [
-        _c("view", { staticClass: "hot-ticket" }, [
-          _c("view", { staticClass: "ticket-bar" }, [
-            _c("text", {}, [_vm._v("热映购票")]),
-            _c("text", { staticClass: "hot-city" }, [_vm._v(_vm._s(_vm.city))])
           ])
         ]),
-        _c("view", { staticClass: "hot-movie-list" }, [
-          _c(
-            "view",
-            { staticClass: "hot-movie-inner" },
-            _vm._l(_vm.hotTicket.movies, function(item, index) {
-              return _vm.hotTicket.movies.length > 0
-                ? _c(
-                    "view",
-                    { key: item.movieId, staticClass: "hot-movie-item" },
-                    [
-                      _c(
-                        "view",
-                        {
-                          staticClass: "img-wrap",
-                          attrs: { eventid: "42f26a26-3-" + index },
-                          on: {
-                            tap: function($event) {
-                              _vm.movieDetail(item)
-                            }
-                          }
-                        },
-                        [
-                          _c("image", {
-                            staticClass: "hot-movie-img",
-                            attrs: { src: item.img, mode: "aspectFill" }
-                          }),
-                          item.ratingFinal != -1 && item.movieId
-                            ? _c("view", { staticClass: "movie-rating" }, [
-                                _vm._v(_vm._s(item.ratingFinal))
-                              ])
-                            : _vm._e()
-                        ]
-                      ),
-                      _c("text", { staticClass: "movie-name" }, [
-                        _vm._v(_vm._s(item.titleCn))
-                      ]),
-                      item.movieId
-                        ? _c(
-                            "view",
-                            {
-                              staticClass: "align-center",
-                              staticStyle: { padding: "20rpx 0" }
-                            },
-                            [
-                              _c("text", { staticClass: "buy-btn" }, [
-                                _vm._v("购票")
-                              ])
-                            ]
-                          )
-                        : _vm._e()
-                    ]
-                  )
-                : _vm._e()
-            })
-          )
-        ])
-      ]),
-      _c("view", { staticClass: "all-network-hot" }, [
-        _vm._m(1),
-        _c("view", { staticClass: "hot-movie-list" }, [
-          _c(
-            "view",
-            { staticClass: "hot-movie-inner" },
-            _vm._l(_vm.commingMovies.attention, function(item, index) {
-              return _vm.commingMovies.attention.length > 0
-                ? _c("view", { key: item.id, staticClass: "hot-movie-item" }, [
-                    _c(
+        _c("view", { staticClass: "all-network-hot" }, [
+          _vm._m(1),
+          _c("view", { staticClass: "hot-movie-list" }, [
+            _c(
+              "view",
+              { staticClass: "hot-movie-inner" },
+              _vm._l(_vm.commingMovies.attention, function(item, index) {
+                return _vm.commingMovies.attention.length > 0
+                  ? _c(
                       "view",
-                      {
-                        staticClass: "img-wrap",
-                        attrs: { eventid: "42f26a26-4-" + index },
-                        on: {
-                          tap: function($event) {
-                            _vm.movieDetail(item)
-                          }
-                        }
-                      },
+                      { key: item.id, staticClass: "hot-movie-item" },
                       [
-                        _c("image", {
-                          staticClass: "hot-movie-img",
-                          attrs: { src: item.image, mode: "aspectFill" }
-                        })
+                        _c(
+                          "view",
+                          {
+                            staticClass: "img-wrap",
+                            attrs: { eventid: "42f26a26-4-" + index },
+                            on: {
+                              tap: function($event) {
+                                _vm.movieDetail(item)
+                              }
+                            }
+                          },
+                          [
+                            _c("image", {
+                              staticClass: "hot-movie-img",
+                              attrs: { src: item.image, mode: "aspectFill" }
+                            })
+                          ]
+                        ),
+                        _c("text", { staticClass: "movie-name" }, [
+                          _vm._v(_vm._s(item.title))
+                        ])
                       ]
-                    ),
-                    _c("text", { staticClass: "movie-name" }, [
-                      _vm._v(_vm._s(item.title))
-                    ])
-                  ])
-                : _vm._e()
-            })
-          )
+                    )
+                  : _vm._e()
+              })
+            )
+          ])
         ])
       ])
     ])

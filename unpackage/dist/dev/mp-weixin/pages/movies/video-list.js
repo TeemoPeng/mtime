@@ -170,11 +170,15 @@ var _navigator = _interopRequireDefault(__webpack_require__(/*! ../../components
   },
   onReady: function onReady() {
     var self = this;
-    _util.default.request({
-      url: 'https://api-m.mtime.cn/Movie/Video.api?pageIndex=' + self.pageIndex + '&movieId=' + self.movieId }).
+    self.api.getVideoList({
+      data: {
+        pageIndex: self.pageIndex,
+        movieId: self.movieId } }).
+
     then(function (res) {
       self.videoList = res.videoList;
     });
+
   },
   components: {
     navigate: _navigator.default },

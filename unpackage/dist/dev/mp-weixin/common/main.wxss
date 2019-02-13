@@ -239,7 +239,7 @@ view {
   -webkit-flex: 1;
       -ms-flex: 1;
           flex: 1;
-  overflow: auto;
+  /*overflow: auto;*/
   margin-top: 25px;
   padding-top: 80rpx;
   -webkit-box-sizing: border-box;

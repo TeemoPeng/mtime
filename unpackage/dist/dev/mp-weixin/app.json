@@ -7,7 +7,8 @@
     "pages/movies/movie-detail",
     "pages/movies/video-list",
     "pages/movies/img-list",
-    "pages/movies/mini-comment"
+    "pages/movies/mini-comment",
+    "pages/movies/cinemas"
   ],
   "subPackages": [],
   "window": {

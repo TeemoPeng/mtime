@@ -277,12 +277,12 @@
   overflow: hidden;
   background: #e4dddd;
   border-radius: 8rpx;
-  height: 320rpx;
+  height: 280rpx;
   border: 1px solid #f5ecec;
 }
 .hot-movie-img {
-  width: 222rpx;
-  height: 320rpx;
+  width: 200rpx;
+  height: 280rpx;
   border-radius: 8rpx;
 }
 .hot-movie-item {

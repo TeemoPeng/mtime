@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import App from './App'
 import api from 'common/api'
+import host from 'common/host'
 Vue.prototype.api = api
+Vue.prototype.host = host
 
 Vue.config.productionTip = false
 

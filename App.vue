@@ -54,7 +54,7 @@
     }
     .flex-flow-row{display: flex;flex-flow: row;align-items: center;}
     .flex-flow-column{display: flex;flex-flow: column;}
-    .main{flex: 1;overflow: auto;margin-top: var(--status-bar-height);padding-top: $navigator-height;box-sizing: border-box;}
+    .main{flex: 1;/*overflow: auto;*/margin-top: var(--status-bar-height);padding-top: $navigator-height;box-sizing: border-box;}
     .loading{text-align:center; line-height:80px;}
     /*uni-image{width: 100%;}*/
 </style>

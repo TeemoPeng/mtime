@@ -23,6 +23,9 @@
 		},
 		{
 			"path": "pages/movies/mini-comment"
+		},
+		{
+			"path": "pages/movies/cinemas"
 		}
 	],
 	"globalStyle": {

@@ -148,8 +148,10 @@ var _navigator = _interopRequireDefault(__webpack_require__(/*! ../../components
   },
   onReady: function onReady() {
     var self = this;
-    _util.default.request({
-      url: 'https://api-m.mtime.cn/Movie/ImageAll.api?movieId=' + self.movieId }).
+    self.api.getImages({
+      data: {
+        movieId: self.movieId } }).
+
     then(function (res) {
       self.imgList = res.images;
     });

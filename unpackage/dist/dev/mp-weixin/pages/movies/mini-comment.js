@@ -142,9 +142,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-var _util = _interopRequireDefault(__webpack_require__(/*! ../../common/util */ "../../../../../../projects/test/uni-app/mtime/common/util.js"));
-var _navigator = _interopRequireDefault(__webpack_require__(/*! ../../components/navigator */ "../../../../../../projects/test/uni-app/mtime/components/navigator.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
+var _util = _interopRequireDefault(__webpack_require__(/*! @/common/util */ "../../../../../../projects/test/uni-app/mtime/common/util.js"));
+var _navigator = _interopRequireDefault(__webpack_require__(/*! @/components/navigator */ "../../../../../../projects/test/uni-app/mtime/components/navigator.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
 {
   data: function data() {
     return {
@@ -182,11 +181,15 @@ var _navigator = _interopRequireDefault(__webpack_require__(/*! ../../components
   },
   methods: {
     init: function init() {
+      //获取短评
       var self = this;
       self.loadAll = false;
       return new Promise(function (resolve, rejected) {
-        _util.default.request({
-          url: self.api.getMinComents + '?pageIndex=' + self.pageIndex + '&movieId=' + self.movieId }).
+        self.api.getMinComents({
+          data: {
+            pageIndex: self.pageIndex,
+            movieId: self.movieId } }).
+
         then(function (res) {
           self.commentList = [];
           self.commentList = res.data.cts;
@@ -204,8 +207,11 @@ var _navigator = _interopRequireDefault(__webpack_require__(/*! ../../components
     loadMore: function loadMore() {
       //加载更多
       var self = this;
-      _util.default.request({
-        url: 'https://api-m.mtime.cn/Showtime/HotMovieComments.api?pageIndex=' + self.pageIndex + '&movieId=' + self.movieId }).
+      self.api.getMinComents({
+        data: {
+          pageIndex: self.pageIndex,
+          movieId: self.movieId } }).
+
       then(function (res) {
         if (res.data.cts.length <= 0) {
           self.loadAll = true;
@@ -219,6 +225,7 @@ var _navigator = _interopRequireDefault(__webpack_require__(/*! ../../components
           self.loadingText = '加载中...';
         }
       }).catch(function (rej) {
+        rejected();
       });
     },
     onPullDownRefresh: function onPullDownRefresh() {
@@ -271,7 +278,7 @@ var render = function() {
           mpcomid: "4309b606-0"
         }
       }),
-      _c("view", { staticClass: "no-scroll-view" }, [
+      _c("view", { staticClass: "main" }, [
         _c("view", { staticClass: "comment-wrap" }, [
           _c(
             "view",

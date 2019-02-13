@@ -22,97 +22,99 @@
 			<view class='weixin-holder'></view>
 			<!-- #endif -->
 		</view>
-		<view class='main'>		
-			<view class="page-section swiper">
-				<!--banner 无详情-->
-                <view class="page-section-spacing">
-                    <swiper class="swiper" :indicator-dots="indicatorDots" :autoplay="autoplay" :interval="interval" :duration="duration" :circular='circular' indicator-color='#f3f3f3' indicator-active-color='#568ad8'>
-                        <swiper-item>
-                            <view class="swiper-item banner banner_01"></view>
-                        </swiper-item>
-                        <swiper-item>
-                            <view class="swiper-item banner banner_02"></view>
-                        </swiper-item>
-                        <swiper-item>
-                            <view class="swiper-item banner banner_03"></view>
-                        </swiper-item>
-						<swiper-item>
-						    <view class="swiper-item banner banner_04"></view>
-						</swiper-item>
-                    </swiper>
-                </view>
-            </view>
-			
-			<view class="tool-wrap">
-				<view class='tool-item'>
-					<view class='tool-txt'>
-						<text class='title'>在线视频</text>
-						<text class='sub-title'>在家看电影</text>
+		<view class='main'>	
+			<view class='main-inner'>
+				<view class="page-section swiper">
+					<!--banner 无详情-->
+	                <view class="page-section-spacing">
+	                    <swiper class="swiper" :indicator-dots="indicatorDots" :autoplay="autoplay" :interval="interval" :duration="duration" :circular='circular' indicator-color='#f3f3f3' indicator-active-color='#568ad8'>
+	                        <swiper-item>
+	                            <view class="swiper-item banner banner_01"></view>
+	                        </swiper-item>
+	                        <swiper-item>
+	                            <view class="swiper-item banner banner_02"></view>
+	                        </swiper-item>
+	                        <swiper-item>
+	                            <view class="swiper-item banner banner_03"></view>
+	                        </swiper-item>
+							<swiper-item>
+							    <view class="swiper-item banner banner_04"></view>
+							</swiper-item>
+	                    </swiper>
+	                </view>
+	            </view>
+				
+				<view class="tool-wrap">
+					<view class='tool-item'>
+						<view class='tool-txt'>
+							<text class='title'>在线视频</text>
+							<text class='sub-title'>在家看电影</text>
+						</view>
 					</view>
+					<view class='tool-item'>
+						<view class='tool-txt'>
+							<text class='title'>猜电影</text>
+							<text class='sub-title'>不服来战</text>
+						</view>
+					</view>
+					<view class='tool-item'>
+						<view class='tool-txt'>
+							<text class='title'>今日推荐</text>
+							<text class='sub-title'>非看不可</text>
+						</view>
+					</view>				
 				</view>
-				<view class='tool-item'>
-					<view class='tool-txt'>
-						<text class='title'>猜电影</text>
-						<text class='sub-title'>不服来战</text>
+				<view class="hot-ticket-wrap">
+					<view class='hot-ticket'>
+						<view class='ticket-bar'>
+							<text class=''>热映购票</text>
+							<text class='hot-city'>{{city}}</text>
+						</view>
+						<!-- <view v-if='hotTicket.totalHotMovie' class='movie-number'>{{hotTicket.totalHotMovie}}部 <text class="iconfont icon-arrow-right"></text></view> -->
 					</view>
-				</view>
-				<view class='tool-item'>
-					<view class='tool-txt'>
-						<text class='title'>今日推荐</text>
-						<text class='sub-title'>非看不可</text>
-					</view>
-				</view>				
-			</view>
-			<view class="hot-ticket-wrap">
-				<view class='hot-ticket'>
-					<view class='ticket-bar'>
-						<text class=''>热映购票</text>
-						<text class='hot-city'>{{city}}</text>
-					</view>
-					<!-- <view v-if='hotTicket.totalHotMovie' class='movie-number'>{{hotTicket.totalHotMovie}}部 <text class="iconfont icon-arrow-right"></text></view> -->
-				</view>
-				<view class='hot-movie-list'>
-					<view class="hot-movie-inner">
-						<view class='hot-movie-item' v-for='(item,index) in hotTicket.movies' v-if='hotTicket.movies.length>0' :key='item.movieId'>
-							<view class='img-wrap' @tap='movieDetail(item)'>
-								<image class='hot-movie-img' :src='item.img' mode='aspectFill'></image>
-								<view class='movie-rating' v-if='item.ratingFinal !=-1 && item.movieId'>{{item.ratingFinal}}</view>
-							</view>
-							<text class='movie-name'>{{item.titleCn}}</text>
-							<view class='align-center' style='padding: 20upx 0;' v-if='item.movieId'>
-								<text class='buy-btn'>购票</text>
+					<view class='hot-movie-list'>
+						<view class="hot-movie-inner">
+							<view class='hot-movie-item' v-for='(item,index) in hotTicket.movies' v-if='hotTicket.movies.length>0' :key='item.movieId'>
+								<view class='img-wrap' @tap='movieDetail(item)'>
+									<image class='hot-movie-img' :src='item.img' mode='aspectFill'></image>
+									<view class='movie-rating' v-if='item.ratingFinal !=-1 && item.movieId'>{{item.ratingFinal}}</view>
+								</view>
+								<text class='movie-name'>{{item.titleCn}}</text>
+								<view class='align-center' style='padding: 20upx 0;' v-if='item.movieId'>
+									<text class='buy-btn'>购票</text>
+								</view>
 							</view>
 						</view>
 					</view>
 				</view>
-			</view>
 
-			<view class='all-network-hot'>
-				<view class='hot-ticket'>
-					<view class='ticket-bar'>
-						<text class=''>即将上映</text>
+				<view class='all-network-hot'>
+					<view class='hot-ticket'>
+						<view class='ticket-bar'>
+							<text class=''>即将上映</text>
+						</view>
+						<!-- <view class='movie-number'>全部 <text class="iconfont icon-arrow-right"></text></view> -->
 					</view>
-					<!-- <view class='movie-number'>全部 <text class="iconfont icon-arrow-right"></text></view> -->
-				</view>
-				<view class='hot-movie-list'>
-					<view class="hot-movie-inner">
-						<view class='hot-movie-item' v-for='(item,index) in commingMovies.attention' v-if='commingMovies.attention.length>0' :key='item.id'>
-							<view class='img-wrap' @tap='movieDetail(item)'>
-								<image class='hot-movie-img' :src='item.image' mode='aspectFill'></image>
-								<!-- <view class='movie-rating' v-if='item.ratingFinal !=-1'>{{item.ratingFinal}}</view> -->
+					<view class='hot-movie-list'>
+						<view class="hot-movie-inner">
+							<view class='hot-movie-item' v-for='(item,index) in commingMovies.attention' v-if='commingMovies.attention.length>0' :key='item.id'>
+								<view class='img-wrap' @tap='movieDetail(item)'>
+									<image class='hot-movie-img' :src='item.image' mode='aspectFill'></image>
+									<!-- <view class='movie-rating' v-if='item.ratingFinal !=-1'>{{item.ratingFinal}}</view> -->
+								</view>
+								<text class='movie-name'>{{item.title}}</text>							
 							</view>
-							<text class='movie-name'>{{item.title}}</text>							
 						</view>
 					</view>
 				</view>
-			</view>
+			</view>	
 		</view>
 	</view>
 </template>
 
 <script>
-	import util from '../../common/util'
-	import cityList from '../../common/cityList'
+	import util from '@/common/util'
+	import cityList from '@/common/cityList'
 	export default {
 		data() {
 			return {
@@ -227,7 +229,10 @@
 					    	var bd09 = util.gcj02tobd09(cjo2[0],cjo2[1]);
 
 					    	//获取当前城市信息
-					      	util.getCityInfo(bd09[0],bd09[1]).then(res=>{
+					      	self.api.getCityInfo({
+					      		lat:bd09[1],
+					      		lng:bd09[0]
+					      	}).then(res=>{
 					      		self.cityList.forEach(function(item,index){
 									if(self.city.indexOf(item.name) != -1){
 										self.city = item.name;
@@ -238,24 +243,28 @@
 					    }
 					});
 
+
+
 					//热映购票，包含未上映
-					util.request({
-						url:'https://api-m.mtime.cn/PageSubArea/HotPlayMovies.api?locationId='+self.cityCode
+					self.api.getHotPlayMovies({
+						data:{
+							locationIdtionId:self.cityCode							
+						}
 					}).then(res=>{
 						self.hotTicket = res;
-					});
-
-					//即将上映
-					//attention 首页
-					//moviecomings 所有即将上映影片
-					util.request({
-						url:'https://api-m.mtime.cn/Movie/MovieComingNew.api?locationId='+self.cityCode
-					}).then(res=>{
-						self.commingMovies = res;
-						resolve();
-					}).catch(rej=>{
-						rejected();
-					})			
+					}).then(()=>{
+						//即将上映
+						self.api.getMovieComingNew({
+							data:{
+								locationId:self.cityCode
+							}
+						}).then(res=>{
+							self.commingMovies = res;
+							resolve();
+						}).catch(rej=>{
+							rejected();
+						})	
+					})		
 				})
 		    }
 		},
@@ -308,5 +317,5 @@
 	.movie-name{text-align: center;display: inline-block;width: 100%;color: #3e3e3e;font-size:28upx;margin: 16upx 0 10upx 0;}
 	.buy-btn{padding: 12upx 32upx;color:#fff;background: linear-gradient(left,#e1ab6b,#ff6e3b);border-radius: 40upx;box-shadow: 2upx 2upx 4upx #fd9f45;font-size: 28upx;}
 	.all-network-hot{margin-top: 30upx;}
-
+	.main-inner{padding-bottom: $footer-height;}
 </style>

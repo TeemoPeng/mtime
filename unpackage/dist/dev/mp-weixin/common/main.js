@@ -79,8 +79,139 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var API = {
-  getMinComents: 'https://api-m.mtime.cn/Showtime/HotMovieComments.api' };var _default =
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _util = _interopRequireDefault(__webpack_require__(/*! common/util */ "../../../../../../projects/test/uni-app/mtime/common/util.js"));
+var _host = _interopRequireDefault(__webpack_require__(/*! common/host */ "../../../../../../projects/test/uni-app/mtime/common/host.js"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+
+var API = {
+  getMinComents: function getMinComents(option) {
+    //获取短评
+    return new Promise(function (resolve, rejected) {
+      _util.default.request({
+        url: 'Showtime/HotMovieComments.api',
+        data: option.data }).
+      then(function (res) {
+        resolve(res);
+      }).catch(function (rej) {
+        rejected(rej);
+      });
+    });
+  },
+  getMovieDetail: function getMovieDetail(option) {
+    //影片详情
+    return new Promise(function (resolve, rejected) {
+      _util.default.request({
+        host: _host.default.ticket,
+        url: 'movie/detail.api',
+        data: option.data }).
+      then(function (res) {
+        resolve(res);
+      }).catch(function (rej) {
+        rejected(rej);
+      });
+    });
+  },
+  getMovieComment: function getMovieComment(option) {
+    //影片评论
+    return new Promise(function (resolve, rejected) {
+      _util.default.request({
+        host: _host.default.ticket,
+        url: 'movie/hotComment.api',
+        data: option.data }).
+      then(function (res) {
+        resolve(res);
+      }).catch(function (rej) {
+        rejected(rej);
+      });
+    });
+  },
+  getHotPlayMovies: function getHotPlayMovies(option) {
+    //热映影片
+    return new Promise(function (resolve, rejected) {
+      _util.default.request({
+        url: 'PageSubArea/HotPlayMovies.api',
+        data: option.data }).
+      then(function (res) {
+        resolve(res);
+      }).catch(function (rej) {
+        rejected(rej);
+      });
+    });
+  },
+  getMovieComingNew: function getMovieComingNew(option) {
+    //即将上映
+    return new Promise(function (resolve, rejected) {
+      _util.default.request({
+        url: 'Movie/MovieComingNew.api',
+        data: option.data }).
+      then(function (res) {
+        resolve(res);
+      }).catch(function (rej) {
+        rejected(rej);
+      });
+    });
+  },
+  getVideoList: function getVideoList(option) {
+    //视频列表
+    return new Promise(function (resolve, rejected) {
+      _util.default.request({
+        url: 'Movie/Video.api',
+        data: option.data }).
+      then(function (res) {
+        resolve(res);
+      }).catch(function (rej) {
+        rejected(rej);
+      });
+    });
+  },
+  getImages: function getImages(option) {
+    //剧照、图片
+    return new Promise(function (resolve, rejected) {
+      _util.default.request({
+        url: '/Movie/ImageAll.api',
+        data: option.data }).
+      then(function (res) {
+        resolve(res);
+      }).catch(function (rej) {
+        rejected(rej);
+      });
+    });
+  },
+
+  /**
+      * 根据经纬度获取城市信息 ，由百度web api 提供 ，坐标需为bd09（百度坐标）
+      * @param  {[type]} lng [经度]
+      * @param  {[type]} lat [纬度]
+      * @return {[type]}    
+      */
+  getCityInfo: function getCityInfo(option) {
+    return new Promise(function (resolve, rejected) {
+      //百度地图web API 逆地理解析
+      _util.default.request({
+        host: _host.default.baiduMap,
+        url: '?callback=?&location=' + option.lat + ',' + option.lng + '&output=json&ak=s1fxz45Ttt9PsG8ZbwKfaymgoYWozpQW' }).
+      then(function (res) {
+        resolve(res);
+      }).catch(function (res) {
+        rejected(res);
+      });
+    });
+  },
+
+  //猫眼 过滤影院
+  filterCinemas: function filterCinemas(option) {
+    return new Promise(function (resolve, rejected) {
+      //百度地图web API 逆地理解析
+      _util.default.request({
+        host: _host.default.mMaoyan,
+        url: 'ajax/filterCinemas',
+        data: option.data }).
+      then(function (res) {
+        resolve(res);
+      }).catch(function (res) {
+        rejected(res);
+      });
+    });
+  } };var _default =
 
 API;exports.default = _default;
 
@@ -97,8 +228,10 @@ API;exports.default = _default;
 __webpack_require__(/*! uni-pages */ "../../../../../../projects/test/uni-app/mtime/pages.json");
 var _vue = _interopRequireDefault(__webpack_require__(/*! vue */ "./node_modules/@dcloudio/vue-cli-plugin-uni/packages/mpvue/index.js"));
 var _App = _interopRequireDefault(__webpack_require__(/*! ./App */ "../../../../../../projects/test/uni-app/mtime/App.vue"));
-var _api = _interopRequireDefault(__webpack_require__(/*! common/api */ "../../../../../../projects/test/uni-app/mtime/common/api.js"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};var ownKeys = Object.keys(source);if (typeof Object.getOwnPropertySymbols === 'function') {ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {return Object.getOwnPropertyDescriptor(source, sym).enumerable;}));}ownKeys.forEach(function (key) {_defineProperty(target, key, source[key]);});}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+var _api = _interopRequireDefault(__webpack_require__(/*! common/api */ "../../../../../../projects/test/uni-app/mtime/common/api.js"));
+var _host = _interopRequireDefault(__webpack_require__(/*! common/host */ "../../../../../../projects/test/uni-app/mtime/common/host.js"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};var ownKeys = Object.keys(source);if (typeof Object.getOwnPropertySymbols === 'function') {ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {return Object.getOwnPropertyDescriptor(source, sym).enumerable;}));}ownKeys.forEach(function (key) {_defineProperty(target, key, source[key]);});}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 _vue.default.prototype.api = _api.default;
+_vue.default.prototype.host = _host.default;
 
 _vue.default.config.productionTip = false;
 

@@ -2,7 +2,7 @@ const x_PI = 3.14159265358979324 * 3000.0 / 180.0;
 const PI = 3.1415926535897932384626;
 const a = 6378245.0;
 const ee = 0.00669342162296594323;
-// import api from 'common/api'
+import host from 'common/host';
 let util = {
 	/**
 	 * 百度坐标系 (BD-09) 与 火星坐标系 (GCJ-02)的转换
@@ -112,31 +112,13 @@ let util = {
 	out_of_china(lng, lat) {
 		return (lng < 72.004 || lng > 137.8347) || ((lat < 0.8293 || lat > 55.8271) || false);
 	},
-
-	/**
-	 * 根据经纬度获取城市信息 ，由百度web api 提供 ，坐标需为bd09（百度坐标）
-	 * @param  {[type]} lng [经度]
-	 * @param  {[type]} lat [纬度]
-	 * @return {[type]}    
-	 */
-	getCityInfo(lng,lat){
-	    return new Promise(function(resolve,rejected){
-	     	//百度地图web API 逆地理解析
-		    util.request({
-		        	url:'http://api.map.baidu.com/geocoder/v2/?callback=?&location='+lat+','+lng+'&output=json&ak=s1fxz45Ttt9PsG8ZbwKfaymgoYWozpQW'
-		    }).then(res=>{
-		     	resolve(res);
-		    }).catch(res=>{
-		     	rejected(res);
-		    });
-	    });
-	},
+	
 	request(option){
 		return new Promise((resolve,rejected)=>{
 			uni.request({
-				url:option.url,
+				url:(option.host?option.host:host.main) + option.url,
 				method:option.method?option.method:'get',
-				data:option.data,
+				data:option.data?option.data:{},
 				header:option.header,
 				dataType:option.dataType,
 				responseType:option.responseType,

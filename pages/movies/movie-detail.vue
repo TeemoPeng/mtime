@@ -89,11 +89,11 @@
                             </view>
                             <view class='office-item'>
                                 <text>{{movieDetail.boxOffice.todayBoxDes}}</text>
-                                <text>今日实时（万） <text class="iconfont icon-arrow-right"></text></text>
+                                <text>{{movieDetail.boxOffice.todayBoxDesUnit}}<text class="iconfont icon-arrow-right"></text></text>
                             </view>
                             <view class='office-item'>
                                 <text>{{movieDetail.boxOffice.totalBoxDes}}</text>
-                                <text>累计票房（万） <text class="iconfont icon-arrow-right"></text></text>
+                                <text>{{movieDetail.boxOffice.totalBoxUnit}} <text class="iconfont icon-arrow-right"></text></text>
                             </view>
                         </view>      
 
@@ -132,7 +132,7 @@
                                 </view>
 
                                 <view class='more-comment' v-if='comment.mini.total > 0'>
-                                    <text class='color-green' @tap='goMiniCommentList'>查看更多{{comment.mini.total}}条评论</text>
+                                    <text class='color-green' @tap='goMiniCommentList'>查看更多{{comment.mini.total}}条评论 </text>
                                 </view>
                             </view>
                         </view>  
@@ -163,11 +163,11 @@
             </view>
             <view class="main-footer">
                 <!--底部-->
-                <view class='foot-like foot-txt' @tap='buyTicket'>
+                <view class='foot-like foot-txt' @tap=''>
                     <text class='iconfont icon-like'></text>
                     <text class=''>想看</text>
                 </view>
-                <view class='foot-comment foot-txt' @tap='buyTicket'>
+                <view class='foot-comment foot-txt' @tap=''>
                     <text class='iconfont icon-edit'></text>
                     <text class=''>评论/评分</text>
                 </view>
@@ -180,9 +180,9 @@
 </template>
 
 <script>
-    import util from '../../common/util'
-    import cityList from '../../common/cityList'
-    import navigate from '../../components/navigator'
+    import util from '@/common/util'
+    import cityList from '@/common/cityList'
+    import navigate from '@/components/navigator'
     export default {
         data() {
             return {
@@ -226,8 +226,11 @@
             init(){
                 let self = this;
                 return new Promise((resolve,rejected)=>{
-                    util.request({
-                        url:'https://ticket-api-m.mtime.cn/movie/detail.api?locationId='+self.cityCode+'&movieId='+self.movieId
+                    self.api.getMovieDetail({
+                        data:{
+                            locationId:self.cityCode,
+                            movieId:self.movieId                            
+                        }
                     }).then(res=>{
                         self.titleText = res.data.basic.name;
                         self.movieDetail = res.data;
@@ -244,11 +247,14 @@
                         }else{
                             self.buyBtnText = '预售';
                         }
-
-                        //获取评论                
-                        util.request({
-                            url:'https://ticket-api-m.mtime.cn/movie/hotComment.api?movieId='+self.movieDetail.basic.movieId
+                    }).then(()=>{
+                        self.api.getMovieComment({
+                            host:self.host.ticket,
+                            data:{
+                                movieId:self.movieId                                
+                            }
                         }).then(res=>{
+                            console.log('comment:',res);
                             self.comment = res.data;                    
                             self.comment.mini.list.forEach((item,index)=>{
                                 item.commentDate= util.formatDate('Y-m-d H:i:s',item.commentDate);
@@ -257,14 +263,50 @@
                         }).catch(rej=>{
                             rejected();
                         })
-                    })                    
+                    })
+
+                    // util.request({
+                    //     url:'https://ticket-api-m.mtime.cn/movie/detail.api?locationId='+self.cityCode+'&movieId='+self.movieId
+                    // }).then(res=>{
+                    //     self.titleText = res.data.basic.name;
+                    //     self.movieDetail = res.data;
+                    //     let year = self.movieDetail.basic.releaseDate.substring(0,4),
+                    //         month = self.movieDetail.basic.releaseDate.substring(4,6),
+                    //         day = self.movieDetail.basic.releaseDate.substring(6,8);
+                    //     self.releaseDate = year+'年'+month+'月'+day+'日';
+
+                    //     let currentDate = new Date().getTime();
+                    //     let releaseDate = (new Date(year+'-'+month+'-'+day)).getTime();
+
+                    //     if(currentDate >= releaseDate){
+                    //         self.buyBtnText = '在线选座';
+                    //     }else{
+                    //         self.buyBtnText = '预售';
+                    //     }
+
+                    //     //获取评论                
+                    //     util.request({
+                    //         url:'https://ticket-api-m.mtime.cn/movie/hotComment.api?movieId='+self.movieDetail.basic.movieId
+                    //     }).then(res=>{
+                    //         self.comment = res.data;                    
+                    //         self.comment.mini.list.forEach((item,index)=>{
+                    //             item.commentDate= util.formatDate('Y-m-d H:i:s',item.commentDate);
+                    //         })
+                    //         resolve();
+                    //     }).catch(rej=>{
+                    //         rejected();
+                    //     })
+                    // })                    
                 })
             },
             buyTicket(){
                 let self = this;
-                uni.showToast({
-                    title:'该功能尚未开发',
-                    icon:'none'
+                // uni.showToast({
+                //     title:'该功能尚未开发',
+                //     icon:'none'
+                // })
+                uni.navigateTo({
+                    url:'cinemas?movieName='+self.movieDetail.basic.name
                 })
             },
             onPullDownRefresh() {
@@ -392,7 +434,7 @@
     .comment-opt{flex: 1;display: flex;flex-flow: row;align-items: center;justify-content: space-between;}
     .comment-opt .iconfont{font-size: 44upx;margin-right: 4upx;}
     .comment-opt>view{display: flex;flex-flow: row;align-items: center;}
-    .more-comment{padding-top: 20upx;text-align: center;}
+    .more-comment{padding: 40upx 0 20upx 0;text-align: center;}
     .movie-long-comment{display: flex;flex-flow: column;padding: 20upx;}
     .long-content{padding: 20upx 0;}
     .user-head-img2{width: 60upx;height: 60upx;}

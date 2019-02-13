@@ -322,4 +322,7 @@
 .all-network-hot {
   margin-top: 30rpx;
 }
+.main-inner {
+  padding-bottom: 120rpx;
+}
 

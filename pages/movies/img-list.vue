@@ -33,8 +33,10 @@
         },
         onReady(){
             let self = this;
-            util.request({                
-                url:'https://api-m.mtime.cn/Movie/ImageAll.api?movieId='+self.movieId
+            self.api.getImages({
+                data:{
+                    movieId:self.movieId
+                }
             }).then(res=>{
                 self.imgList = res.images;
             })

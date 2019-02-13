@@ -4139,6 +4139,28 @@ cityList;exports.default = _default;
 
 /***/ }),
 
+/***/ "../../../../../../projects/test/uni-app/mtime/common/host.js":
+/*!*****************************************************!*\
+  !*** D:/projects/test/uni-app/mtime/common/host.js ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var main = 'https://api-m.mtime.cn/';
+var ticket = 'https://ticket-api-m.mtime.cn/';
+var baiduMap = 'http://api.map.baidu.com/geocoder/v2/';
+var mMaoyan = 'https://m.maoyan.com/'; //猫眼api
+var maoyan = 'http://maoyan.com/'; //
+var _default = {
+  main: main,
+  ticket: ticket,
+  baiduMap: baiduMap,
+  maoyan: maoyan,
+  mMaoyan: mMaoyan };exports.default = _default;
+
+/***/ }),
+
 /***/ "../../../../../../projects/test/uni-app/mtime/common/util.js":
 /*!*****************************************************!*\
   !*** D:/projects/test/uni-app/mtime/common/util.js ***!
@@ -4147,11 +4169,11 @@ cityList;exports.default = _default;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var x_PI = 3.14159265358979324 * 3000.0 / 180.0;
-var PI = 3.1415926535897932384626;
-var a = 6378245.0;
-var ee = 0.00669342162296594323;
-// import api from 'common/api'
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
+
+
+
+var _host = _interopRequireDefault(__webpack_require__(/*! common/host */ "../../../../../../projects/test/uni-app/mtime/common/host.js"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var x_PI = 3.14159265358979324 * 3000.0 / 180.0;var PI = 3.1415926535897932384626;var a = 6378245.0;var ee = 0.00669342162296594323;
 var util = {
   /**
               * 百度坐标系 (BD-09) 与 火星坐标系 (GCJ-02)的转换
@@ -4262,30 +4284,12 @@ var util = {
     return lng < 72.004 || lng > 137.8347 || lat < 0.8293 || lat > 55.8271 || false;
   },
 
-  /**
-      * 根据经纬度获取城市信息 ，由百度web api 提供 ，坐标需为bd09（百度坐标）
-      * @param  {[type]} lng [经度]
-      * @param  {[type]} lat [纬度]
-      * @return {[type]}    
-      */
-  getCityInfo: function getCityInfo(lng, lat) {
-    return new Promise(function (resolve, rejected) {
-      //百度地图web API 逆地理解析
-      util.request({
-        url: 'http://api.map.baidu.com/geocoder/v2/?callback=?&location=' + lat + ',' + lng + '&output=json&ak=s1fxz45Ttt9PsG8ZbwKfaymgoYWozpQW' }).
-      then(function (res) {
-        resolve(res);
-      }).catch(function (res) {
-        rejected(res);
-      });
-    });
-  },
   request: function request(option) {
     return new Promise(function (resolve, rejected) {
       uni.request({
-        url: option.url,
+        url: (option.host ? option.host : _host.default.main) + option.url,
         method: option.method ? option.method : 'get',
-        data: option.data,
+        data: option.data ? option.data : {},
         header: option.header,
         dataType: option.dataType,
         responseType: option.responseType,
@@ -10685,6 +10689,7 @@ try {
 
 
 
+
 {
   data: function data() {
     return {
@@ -10705,6 +10710,10 @@ try {
       default: false },
 
     showShare: {
+      type: Boolean,
+      default: false },
+
+    showSearchIcon: {
       type: Boolean,
       default: false } },
 
@@ -10737,6 +10746,9 @@ try {
       }
     },
     share: function share() {
+      var self = this;
+    },
+    search: function search() {
       var self = this;
     } },
 

@@ -11,6 +11,7 @@
             <!-- #ifndef MP-WEIXIN -->
                 <text v-if='showStar' :class='starActived +" iconfont"' @tap='likeMovie'></text>
                 <text class='iconfont icon-ic-share-o' v-if='showShare' @tap='share'></text>
+                <text class='iconfont icon-search' v-if='showSearchIcon' @tap='search'></text>
             <!-- #endif -->
             </view>
         </view>
@@ -38,6 +39,10 @@
                 default:false
             },
             showShare:{
+                type:Boolean,
+                default:false
+            },
+            showSearchIcon:{
                 type:Boolean,
                 default:false
             }
@@ -71,6 +76,9 @@
             },
             share(){
                 let self = this;
+            },
+            search(){
+                let self = this;
             }
         },
         components:{
@@ -102,4 +110,5 @@
     .title-left .iconfont{font-size: 40upx;}
     .title-right .iconfont:last-child{margin:0;}
     .icon-star-actived{color: #84d00a}
+    .title-right .icon-search{font-size: 48upx;}
 </style>
