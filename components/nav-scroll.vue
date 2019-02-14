@@ -32,5 +32,6 @@
 
 <style lang='scss'>
     @import "static/css/base.scss";
+    
     .nav-scroll{height: $navigator-height;background: $navigator-background;}
 </style>
